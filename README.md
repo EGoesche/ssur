@@ -1,4 +1,4 @@
 # ssur
-Stoßsimulation und Rekonstruktion - Programmierbeleg
+Stosssimulation und Rekonstruktion - Programmierbeleg
 
 Weitere Informationen:
