@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
 
 
-<AnchorPane prefHeight="500.0" prefWidth="850.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/11.0.1">
-	<!-- TODO Add Nodes -->
+<AnchorPane prefHeight="500.0" prefWidth="850.0" style="-fx-background-color: #fff;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <VBox layoutY="74.0" prefHeight="426.0" prefWidth="66.0" />
+      <AnchorPane layoutX="80.0" layoutY="75.0" prefHeight="414.0" prefWidth="769.0" />
+      <Pane prefHeight="74.0" prefWidth="850.0" style="-fx-background-color: #65B;" />
+   </children>
 </AnchorPane>
