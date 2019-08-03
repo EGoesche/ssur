@@ -15,6 +15,7 @@ public class Main extends Application
         Parent root = FXMLLoader.load(getClass().getResource("Home.fxml"));
         primaryStage.setTitle("SSUR");
         primaryStage.setScene(new Scene(root));
+        root.getStylesheets().add(getClass().getResource("Style.css").toExternalForm());
         primaryStage.show();
     }
 
