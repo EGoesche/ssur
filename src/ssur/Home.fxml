@@ -12,16 +12,16 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="554.0" prefWidth="835.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="554.0" prefWidth="835.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ssur.HomeController">
    <children>
       <VBox prefHeight="554.0" prefWidth="152.0" styleClass="sideMenu" stylesheets="@Style.css">
          <children>
-            <Label alignment="CENTER" prefHeight="50.0" prefWidth="152.0" text="SSUR" textFill="WHITE">
+            <Label fx:id="lb_programmname" alignment="CENTER" prefHeight="50.0" prefWidth="152.0" text="SSUR" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="23.0" />
                </font>
             </Label>
-            <RadioButton mnemonicParsing="false" prefHeight="36.0" prefWidth="177.0" selected="true" styleClass="sideMenuButton" stylesheets="@Style.css" text="Simulation">
+            <RadioButton fx:id="rbtn_simulation" mnemonicParsing="false" prefHeight="36.0" prefWidth="177.0" selected="true" styleClass="sideMenuButton" stylesheets="@Style.css" text="Simulation">
                <toggleGroup>
                   <ToggleGroup fx:id="modus" />
                </toggleGroup>
@@ -29,31 +29,31 @@
                   <Insets left="5.0" />
                </padding>
             </RadioButton>
-            <RadioButton mnemonicParsing="false" prefHeight="36.0" prefWidth="152.0" styleClass="sideMenuButton" stylesheets="@Style.css" text="Rekonstruktion" toggleGroup="$modus">
+            <RadioButton fx:id="rbtn_rekonstruktion" mnemonicParsing="false" prefHeight="36.0" prefWidth="152.0" styleClass="sideMenuButton" stylesheets="@Style.css" text="Rekonstruktion" toggleGroup="$modus">
                <padding>
                   <Insets left="5.0" />
                </padding></RadioButton>
             <Separator opacity="0.0" orientation="VERTICAL" prefHeight="60.0" prefWidth="0.0" />
-            <Button mnemonicParsing="false" prefHeight="65.0" prefWidth="152.0" styleClass="sideMenuButton" stylesheets="@Style.css" text="Dateneingabe">
+            <Button fx:id="btn_dateneingabe" mnemonicParsing="false" prefHeight="65.0" prefWidth="152.0" styleClass="sideMenuButton" stylesheets="@Style.css" text="Dateneingabe">
                <graphic>
                   <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../../../../Desktop/04fe7bf70776ed9cb2d2c9bf570d23f4.png" />
+                        <Image url="@icons/platzh.png" />
                      </image>
                   </ImageView>
                </graphic>
             </Button>
-            <Button mnemonicParsing="false" prefHeight="65.0" prefWidth="158.0" styleClass="sideMenuButton" stylesheets="@Style.css" text="Einstellungen">
+            <Button fx:id="btn_einstellungen" mnemonicParsing="false" onAction="#goToSettings" prefHeight="65.0" prefWidth="158.0" styleClass="sideMenuButton" stylesheets="@Style.css" text="Einstellungen">
                <graphic>
                   <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../../../../Desktop/04fe7bf70776ed9cb2d2c9bf570d23f4.png" />
+                        <Image url="@icons/platzh.png" />
                      </image>
                   </ImageView>
                </graphic>
             </Button>
             <Separator opacity="0.0" orientation="VERTICAL" prefHeight="60.0" prefWidth="0.0" />
-            <Label alignment="CENTER" prefHeight="18.0" prefWidth="157.0" text="Version 0.1 alpha" textFill="WHITE" />
+            <Label fx:id="lb_version" alignment="CENTER" prefHeight="18.0" prefWidth="157.0" text="Version 0.1 alpha" textFill="WHITE" />
          </children>
       </VBox>
    </children>
