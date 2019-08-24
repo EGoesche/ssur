@@ -3,9 +3,12 @@
 }
 
 .sideMenu {
-	-fx-background-color:#0a3d62
-	
+	-fx-background-color:#0a3d62;
 	}
+	
+.bottomMenu {
+	-fx-background-color:#0a3d62;
+}
 
 .sideMenuButton {
 	-fx-background-color:#0a3d62;
@@ -14,6 +17,10 @@
 	-fx-focus-color: transparent;
 	-fx-alignment: center-left;
 	}
+	
+.sideMenuText {
+	-fx-text-fill:white;
+}
 	
 .sideMenuButton:hover { 
     -fx-background-color:#072D47;

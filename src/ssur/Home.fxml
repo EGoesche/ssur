@@ -5,23 +5,25 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="554.0" prefWidth="835.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ssur.HomeController">
-   <children>
-      <VBox prefHeight="554.0" prefWidth="152.0" styleClass="sideMenu" stylesheets="@Style.css">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="550.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ssur.HomeController">
+   <left>
+      <VBox prefHeight="396.0" prefWidth="148.0" styleClass="sideMenu" stylesheets="@Style.css" BorderPane.alignment="CENTER">
          <children>
-            <Label fx:id="lb_programmname" alignment="CENTER" prefHeight="50.0" prefWidth="152.0" text="SSUR" textFill="WHITE">
+            <Label fx:id="lb_programmname" alignment="CENTER" prefHeight="45.0" prefWidth="130.0" text="SSUR" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="23.0" />
                </font>
             </Label>
-            <RadioButton fx:id="rbtn_simulation" mnemonicParsing="false" prefHeight="36.0" prefWidth="177.0" selected="true" styleClass="sideMenuButton" stylesheets="@Style.css" text="Simulation">
+            <RadioButton fx:id="rbtn_simulation" mnemonicParsing="false" prefHeight="42.0" prefWidth="174.0" selected="true" styleClass="sideMenuButton" stylesheets="@Style.css" text="Simulation">
                <toggleGroup>
                   <ToggleGroup fx:id="modus" />
                </toggleGroup>
@@ -29,12 +31,13 @@
                   <Insets left="5.0" />
                </padding>
             </RadioButton>
-            <RadioButton fx:id="rbtn_rekonstruktion" mnemonicParsing="false" prefHeight="36.0" prefWidth="152.0" styleClass="sideMenuButton" stylesheets="@Style.css" text="Rekonstruktion" toggleGroup="$modus">
+            <RadioButton fx:id="rbtn_rekonstruktion" mnemonicParsing="false" prefHeight="42.0" prefWidth="178.0" styleClass="sideMenuButton" stylesheets="@Style.css" text="Rekonstruktion" toggleGroup="$modus">
                <padding>
                   <Insets left="5.0" />
-               </padding></RadioButton>
-            <Separator opacity="0.0" orientation="VERTICAL" prefHeight="60.0" prefWidth="0.0" />
-            <Button fx:id="btn_dateneingabe" mnemonicParsing="false" prefHeight="65.0" prefWidth="152.0" styleClass="sideMenuButton" stylesheets="@Style.css" text="Dateneingabe">
+               </padding>
+            </RadioButton>
+            <Separator opacity="0.0" orientation="VERTICAL" prefHeight="42.0" prefWidth="0.0" />
+            <Button fx:id="btn_dateneingabe" mnemonicParsing="false" prefHeight="41.0" prefWidth="167.0" styleClass="sideMenuButton" stylesheets="@Style.css" text="Dateneingabe">
                <graphic>
                   <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -43,7 +46,7 @@
                   </ImageView>
                </graphic>
             </Button>
-            <Button fx:id="btn_einstellungen" mnemonicParsing="false" onAction="#goToSettings" prefHeight="65.0" prefWidth="158.0" styleClass="sideMenuButton" stylesheets="@Style.css" text="Einstellungen">
+            <Button fx:id="btn_einstellungen" mnemonicParsing="false" onAction="#goToSettings" prefHeight="34.0" prefWidth="181.0" styleClass="sideMenuButton" stylesheets="@Style.css" text="Einstellungen">
                <graphic>
                   <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -52,9 +55,43 @@
                   </ImageView>
                </graphic>
             </Button>
-            <Separator opacity="0.0" orientation="VERTICAL" prefHeight="60.0" prefWidth="0.0" />
-            <Label fx:id="lb_version" alignment="CENTER" prefHeight="18.0" prefWidth="157.0" text="Version 0.1 alpha" textFill="WHITE" />
+            <Separator opacity="0.0" orientation="VERTICAL" prefHeight="42.0" prefWidth="0.0" />
+            <Label fx:id="lb_version" alignment="CENTER" prefHeight="18.0" prefWidth="198.0" styleClass="sideMenuText" stylesheets="@Style.css" text="Version 0.1 alpha" textFill="WHITE">
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </Label>
          </children>
       </VBox>
-   </children>
-</AnchorPane>
+   </left>
+   <bottom>
+      <VBox prefHeight="154.0" prefWidth="850.0" styleClass="bottomMenu" stylesheets="@Style.css" BorderPane.alignment="CENTER">
+         <children>
+            <Label alignment="CENTER" maxWidth="1.7976931348623157E308" prefHeight="36.0" prefWidth="877.0" styleClass="sideMenuText" stylesheets="@Style.css" text="Parameter">
+               <font>
+                  <Font size="25.0" />
+               </font>
+            </Label>
+            <HBox prefHeight="118.0" prefWidth="348.0">
+               <children>
+                  <VBox prefHeight="118.0" prefWidth="160.0">
+                     <children>
+                        <Label alignment="CENTER" prefHeight="18.0" prefWidth="223.0" styleClass="sideMenuText" stylesheets="@Style.css" text="Gewicht (in kg)" />
+                        <TextField prefHeight="26.0" prefWidth="12.0" />
+                        <Label alignment="CENTER" prefHeight="18.0" prefWidth="242.0" styleClass="sideMenuText" stylesheets="@Style.css" text="Geschwindigkeit (in km/h)" />
+                        <TextField />
+                     </children>
+                  </VBox>
+                  <Separator opacity="0.0" prefWidth="20.0" />
+                  <VBox maxWidth="1.7976931348623157E308" prefHeight="118.0" prefWidth="142.0">
+                     <children>
+                        <Label alignment="CENTER" prefHeight="18.0" prefWidth="223.0" styleClass="sideMenuText" stylesheets="@Style.css" text="Spalte 2" />
+                        <TextField />
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </bottom>
+</BorderPane>
