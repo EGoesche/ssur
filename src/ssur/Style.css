@@ -2,12 +2,15 @@
     -fx-background-color:white;
 }
 
+.pane {
+	-fx-background-color:#f5f6fa;
+}
 .sideMenu {
 	-fx-background-color:#0a3d62;
 	}
 	
 .bottomMenu {
-	-fx-background-color:#0a3d62;
+	-fx-background-color:#40739e;
 }
 
 .sideMenuButton {
@@ -18,7 +21,7 @@
 	-fx-alignment: center-left;
 	}
 	
-.sideMenuText {
+.MenuText {
 	-fx-text-fill:white;
 }
 	
