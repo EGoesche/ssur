@@ -41,6 +41,7 @@ public class HomeController
     @FXML private ChoiceBox<String> cb_fahrzeugtyp;
     @FXML private Label lb_fahrzeugfarbe;
     @FXML private ChoiceBox<String> cb_fahrzeugfarbe;
+    @FXML private Button btn_parameterspeichern;
     
     //ObservableListen fuer ChoiceBoxen
     ObservableList<String> fahrzeugtypen = FXCollections.observableArrayList("PKW", "LKW");
@@ -62,6 +63,9 @@ public class HomeController
     	//Tooltipps werden erstellt
     	cb_fahrzeugtyp.setTooltip(new Tooltip("Wählen Sie den Typ des aktuellen Fahrzeuges."));
     	cb_fahrzeugfarbe.setTooltip(new Tooltip("Wählen Sie eine Farbe für das aktuelle Fahrzeug."));
+    	
+    	Fahrzeug f1 = new Fahrzeug();
+    	Fahrzeug f2 = new Fahrzeug();
     }
     
     
@@ -79,6 +83,12 @@ public class HomeController
     	
     	window.setScene(settings);
     	window.show();
+    }
+    
+    @FXML
+    public void speichereParameter(ActionEvent event) throws IOException
+    {
+    	//if f1 angewaehlt ... if f2 angewaehlt ...
     }
     
     
@@ -131,9 +141,136 @@ public class HomeController
     	textField.setText(value);
     }
     
+    /**
+     * Methode zur Berechnung des Aufprallzeitpunktes zweier Fahrzeuge.
+     * @param mitReibung
+     * @param geschw1
+     * @param geschw2
+     * @param fahrtricht1
+     * @param fahrtricht2
+     * @param startp1
+     * @param startp2
+     * @return
+     */
+    public float berechneAuftreffzeitpunkt(boolean mitReibung, float geschw1, float geschw2, int fahrtricht1, int fahrtricht2,
+    		float startp1, float startp2)
+    {
+    	if (mitReibung) //mit Reibung
+    	{
+    		if (geschw1 == geschw2) //Beide Fahrzeuge sind gleich schnell
+    		{
+    			System.out.println("Fehler!");
+    			return -1;
+    		}
+    			
+    		if (geschw1 == 0 ^ geschw2 == 0) //Eines der beiden Fahrzeuge steht still, aber nicht beide
+    		{
+    			return -1;
+    		}
+    		
+    		if (fahrtricht1 != fahrtricht2) //Die Fahrzeuge fahren sich entgegen
+    		{
+    			return -1;
+    		}
+    		else //Die Fahrzeuge fahren in die selbe Richtung
+    		{
+    			return -1;
+    		}
+    	}
+    	else //ohne Reibung
+    	{
+    		if (geschw1 == geschw2) //Beide Fahrzeuge sind gleich schnell
+    		{
+    			System.out.println("Fehler!");
+    			return -1;
+    		}
+    			
+    		if (geschw1 == 0 ^ geschw2 == 0) //Eines der beiden Fahrzeuge steht still, aber nicht beide
+    		{
+    			if (geschw1 == 0) {return (Math.abs(startp1 - startp2) / geschw2);}
+    			else {return (Math.abs(startp1 - startp2) / geschw1);}
+    		}
+    		
+    		if (fahrtricht1 != fahrtricht2) //Die Fahrzeuge fahren sich entgegen
+    		{
+    	    	float geschwindigkeit = Math.abs(geschw1) + Math.abs(geschw2);
+    	    	float strecke = Math.abs(startp1) + Math.abs(startp2);
+    	    	return (strecke / geschwindigkeit);
+    		}
+    		else //Die Fahrzeuge fahren in die selbe Richtung
+    		{
+    			return Math.abs((startp1 - startp2) / Math.abs(geschw1 - geschw2));
+    		}
+    	}
+    }
     
- 
-
+    
+    /**
+     * Methode zur Berechnung des Aufprallortes zweier Fahrzeuge
+     * @param mitReibung
+     * @param geschw1
+     * @param geschw2
+     * @param fahrtricht1
+     * @param fahrtricht2
+     * @param startp1
+     * @param startp2
+     * @return
+     */
+    public float berechneAufprallort(boolean mitReibung, float geschw1, float geschw2, int fahrtricht1, int fahrtricht2,
+    		float startp1, float startp2)
+    {
+    	if (mitReibung) //mit Reibung
+    	{
+    		if (geschw1 == geschw2) //Beide Fahrzeuge sind gleich schnell
+    		{
+    			System.out.println("Fehler!");
+    			return -1;
+    		}
+    			
+    		if (geschw1 == 0 ^ geschw2 == 0) //Eines der beiden Fahrzeuge steht still, aber nicht beide
+    		{
+    			return -1;
+    		}
+    		
+    		if (fahrtricht1 != fahrtricht2) //Die Fahrzeuge fahren sich entgegen
+    		{
+    			return -1;
+    		}
+    		else //Die Fahrzeuge fahren in die selbe Richtung
+    		{
+    			return -1;
+    		}
+    	}
+    	else //ohne Reibung
+    	{
+    		if (geschw1 == geschw2) //Beide Fahrzeuge sind gleich schnell
+    		{
+    			System.out.println("Fehler!");
+    			return -1;
+    		}
+    			
+    		if (geschw1 == 0 ^ geschw2 == 0) //Eines der beiden Fahrzeuge steht still, aber nicht beide
+    		{
+    			if (geschw1 == 0) {return startp1;}
+    			else {return startp2;}
+    		}
+    		
+    		if (fahrtricht1 != fahrtricht2) //Die Fahrzeuge fahren sich entgegen
+    		{
+    			float geschwindigkeit = Math.abs(geschw1) + Math.abs(geschw2);
+    	    	float strecke = Math.abs(startp1) + Math.abs(startp2);
+    	    	float aufprallzeitpunkt = (strecke / geschwindigkeit);
+    	    	
+    	    	return (aufprallzeitpunkt * geschw1);
+    		}
+    		else //Die Fahrzeuge fahren in die selbe Richtung
+    		{
+    			float aufprallzeitpunkt = Math.abs((startp1 - startp2) / Math.abs(geschw1 - geschw2));
+    			
+    			return (geschw1 * aufprallzeitpunkt);
+    		}
+    	}
+    }
     
         
 }
