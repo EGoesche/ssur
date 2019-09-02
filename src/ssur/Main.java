@@ -23,6 +23,7 @@ public class Main extends Application
         
         window.setTitle("SSUR");
         window.setScene(new Scene(home));
+        window.setResizable(false);
         window.show();
     }
 

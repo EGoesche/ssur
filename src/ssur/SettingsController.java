@@ -31,6 +31,7 @@ public class SettingsController
     	Stage window = (Stage)((Node)event.getSource()).getScene().getWindow();
     	
     	window.setScene(home);
+    	window.setResizable(false);
     	window.show();
     }
 }

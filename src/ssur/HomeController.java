@@ -15,7 +15,13 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.control.Tooltip;
+import javafx.scene.effect.ColorAdjust;
+import javafx.scene.effect.Glow;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 public class HomeController
@@ -43,6 +49,12 @@ public class HomeController
     @FXML private ChoiceBox<String> cb_fahrzeugfarbe;
     @FXML private Button btn_parameterspeichern;
     
+    //Items im Pane
+    @FXML private ToggleButton btn_fahrzeug1;
+    @FXML private ToggleButton btn_fahrzeug2;
+    @FXML private ImageView iv_fahrzeug1;
+    @FXML private ImageView iv_fahrzeug2;
+    
     //ObservableListen fuer ChoiceBoxen
     ObservableList<String> fahrzeugtypen = FXCollections.observableArrayList("PKW", "LKW");
     ObservableList<String> fahrzeugfarben = FXCollections.observableArrayList("rot", "blau", "grün", "schwarz");
@@ -58,14 +70,17 @@ public class HomeController
     	cb_fahrzeugtyp.setItems(fahrzeugtypen);
     	cb_fahrzeugfarbe.setItems(fahrzeugfarben);
     	
-    	//cb_fahrzeugtyp.setValue("Bitte .");
-    	
     	//Tooltipps werden erstellt
     	cb_fahrzeugtyp.setTooltip(new Tooltip("Wählen Sie den Typ des aktuellen Fahrzeuges."));
     	cb_fahrzeugfarbe.setTooltip(new Tooltip("Wählen Sie eine Farbe für das aktuelle Fahrzeug."));
     	
+    	//Die zu kollidierenen Fahrzeuge werden erstellt
     	Fahrzeug f1 = new Fahrzeug();
     	Fahrzeug f2 = new Fahrzeug();
+    	
+    	//Parameter des beim Programmstart ausgewaehlten Fahrzeug werden  geladen
+    	ladeParameter(f1);
+    	
     }
     
     
@@ -82,8 +97,10 @@ public class HomeController
     	Stage window = (Stage)((Node)event.getSource()).getScene().getWindow();
     	
     	window.setScene(settings);
+    	window.setResizable(false);
     	window.show();
     }
+    
     
     @FXML
     public void speichereParameter(ActionEvent event) throws IOException
@@ -97,7 +114,6 @@ public class HomeController
      * @param choiceBox
      * @return
      */
-    @FXML
     public String getChoiceBox(ChoiceBox<String> choiceBox)
     {
     	String value = choiceBox.getValue();
@@ -110,7 +126,6 @@ public class HomeController
      * @param choiceBox
      * @param value
      */
-    @FXML
     public void setChoiceBox(ChoiceBox<String> choiceBox, String value)
     {
     	choiceBox.setValue(value);
@@ -122,7 +137,6 @@ public class HomeController
      * @param textField
      * @return
      */
-    @FXML
     public String getTextField(TextField textField)
     {
     	String value = textField.getText();
@@ -135,11 +149,28 @@ public class HomeController
      * @param textField
      * @param value
      */
-    @FXML
     public void setTextField(TextField textField, String value)
     {
     	textField.setText(value);
     }
+    
+    @FXML
+    public void ladeParameter(ActionEvent event)
+    {
+    	ToggleButton btn = (ToggleButton) event.getSource();
+    	//if (btn == btn_fahrzeug1) {ladeParameter(f1);}
+    }
+    
+    public void ladeParameter(Fahrzeug fahrzeug)
+    {
+ 	   setTextField(tf_gewicht, Float.toString(fahrzeug.getGewicht()));
+ 	   setTextField(tf_geschwindigkeit, Float.toString(fahrzeug.getGeschwindigkeit()));
+ 	   setTextField(tf_impuls, Float.toString(fahrzeug.getImpuls()));
+ 	   setTextField(tf_energie, Float.toString(fahrzeug.getEkin()));
+ 	   setChoiceBox(cb_fahrzeugtyp, fahrzeug.getFahrzeugtyp());
+ 	   setChoiceBox(cb_fahrzeugfarbe, fahrzeug.getFarbcode());
+    }
+    
     
     /**
      * Methode zur Berechnung des Aufprallzeitpunktes zweier Fahrzeuge.

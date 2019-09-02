@@ -1,3 +1,8 @@
+/**
+ * Klasse fuer Fahrzeuge
+ * @author egoesche
+ */
+
 package ssur;
 
 public class Fahrzeug 
@@ -6,8 +11,8 @@ public class Fahrzeug
 	private int fahrtrichtung;
 	private float gewicht; //in kg
 	private float startpunkt; //in m
-	private int farbcode;
-	private int fahrzeugtyp;
+	private String farbcode;
+	private String fahrzeugtyp;
 	private float impuls;
 	private float ekin;
 	
@@ -17,13 +22,13 @@ public class Fahrzeug
 		fahrtrichtung = 0;
 		gewicht = 0;
 		startpunkt = 0;
-		farbcode = 0;
-		fahrzeugtyp = 0;
+		farbcode = "schwarz";
+		fahrzeugtyp = "PKW";
 		impuls = 0;
 		ekin = 0;		
 	}
 	
-	public Fahrzeug(float geschwindigkeit, int fahrtrichtung, float gewicht, float startpunkt, int farbcode, int fahrzeugtyp, float impuls, float ekin)
+	public Fahrzeug(float geschwindigkeit, int fahrtrichtung, float gewicht, float startpunkt, String farbcode, String fahrzeugtyp, float impuls, float ekin)
 	{
 		this.geschwindigkeit = geschwindigkeit;
 		this.fahrtrichtung = fahrtrichtung;
@@ -48,11 +53,11 @@ public class Fahrzeug
 	public float getStartpunkt() {return startpunkt;}
 	public void setStartpunkt(float startpunkt) {this.startpunkt = startpunkt;}
 	
-	public int getFarbcode() {return farbcode;}
-	public void setFarbcode(int farbcode) {this.farbcode = farbcode;}
+	public String getFarbcode() {return farbcode;}
+	public void setFarbcode(String farbcode) {this.farbcode = farbcode;}
 	
-	public int getFahrzeugtyp() {return fahrzeugtyp;}
-	public void setFahrzeugtyp(int fahrzeugtyp) {this.fahrzeugtyp = fahrzeugtyp;}
+	public String getFahrzeugtyp() {return fahrzeugtyp;}
+	public void setFahrzeugtyp(String fahrzeugtyp) {this.fahrzeugtyp = fahrzeugtyp;}
 	
 	public float getImpuls() {return impuls;}
 	public void setImpuls(float impuls) {this.impuls = impuls;}

@@ -21,6 +21,14 @@
 	-fx-alignment: center-left;
 	}
 	
+.fahrzeugButton {
+	-fx-background-color:#f5f6fa;
+}
+
+.fahrzeugButton:selected {
+	-fx-background-color: -fx-focus-color;
+}
+
 .MenuText {
 	-fx-text-fill:white;
 }
