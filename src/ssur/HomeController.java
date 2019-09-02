@@ -59,7 +59,10 @@ public class HomeController
     ObservableList<String> fahrzeugtypen = FXCollections.observableArrayList("PKW", "LKW");
     ObservableList<String> fahrzeugfarben = FXCollections.observableArrayList("rot", "blau", "grün", "schwarz");
     
-    
+	//Die zu kollidierenen Fahrzeuge werden erstellt
+	Fahrzeug f1 = new Fahrzeug();
+	Fahrzeug f2 = new Fahrzeug();
+	
     /**
      * Initialisierungsmethode
      */
@@ -74,9 +77,7 @@ public class HomeController
     	cb_fahrzeugtyp.setTooltip(new Tooltip("Wählen Sie den Typ des aktuellen Fahrzeuges."));
     	cb_fahrzeugfarbe.setTooltip(new Tooltip("Wählen Sie eine Farbe für das aktuelle Fahrzeug."));
     	
-    	//Die zu kollidierenen Fahrzeuge werden erstellt
-    	Fahrzeug f1 = new Fahrzeug();
-    	Fahrzeug f2 = new Fahrzeug();
+    	
     	
     	//Parameter des beim Programmstart ausgewaehlten Fahrzeug werden  geladen
     	ladeParameter(f1);
@@ -155,10 +156,11 @@ public class HomeController
     }
     
     @FXML
-    public void ladeParameter(ActionEvent event)
+    public void ladeParameter(MouseEvent event)
     {
     	ToggleButton btn = (ToggleButton) event.getSource();
-    	//if (btn == btn_fahrzeug1) {ladeParameter(f1);}
+    	if (btn == btn_fahrzeug1) {ladeParameter(f1);}
+    	if (btn == btn_fahrzeug2) {ladeParameter(f2);}
     }
     
     public void ladeParameter(Fahrzeug fahrzeug)

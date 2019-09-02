@@ -121,7 +121,7 @@
    <center>
       <Pane prefHeight="200.0" prefWidth="200.0" styleClass="pane" stylesheets="@Style.css" BorderPane.alignment="CENTER">
          <children>
-            <ToggleButton fx:id="btn_fahrzeug1" contentDisplay="BOTTOM" graphicTextGap="0.0" layoutX="14.0" layoutY="198.0" mnemonicParsing="false" selected="true" styleClass="fahrzeugButton" stylesheets="@Style.css" text="Fahrzeug 1">
+            <ToggleButton fx:id="btn_fahrzeug1" contentDisplay="BOTTOM" graphicTextGap="0.0" layoutX="14.0" layoutY="198.0" mnemonicParsing="false" onMouseClicked="#ladeParameter" selected="true" styleClass="fahrzeugButton" stylesheets="@Style.css" text="Fahrzeug 1">
                <graphic>
                   <ImageView fx:id="iv_fahrzeug1" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -133,7 +133,7 @@
                   <ToggleGroup fx:id="fahrzeug" />
                </toggleGroup>
             </ToggleButton>
-            <ToggleButton fx:id="btn_fahrzeug2" contentDisplay="BOTTOM" graphicTextGap="0.0" layoutX="522.0" layoutY="198.0" mnemonicParsing="false" styleClass="fahrzeugButton" stylesheets="@Style.css" text="Fahrzeug 2" toggleGroup="$fahrzeug">
+            <ToggleButton fx:id="btn_fahrzeug2" contentDisplay="BOTTOM" graphicTextGap="0.0" layoutX="522.0" layoutY="198.0" mnemonicParsing="false" onMouseClicked="#ladeParameter" styleClass="fahrzeugButton" stylesheets="@Style.css" text="Fahrzeug 2" toggleGroup="$fahrzeug">
                <graphic>
                   <ImageView fx:id="iv_fahrzeug2" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                      <image>
