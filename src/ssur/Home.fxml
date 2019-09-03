@@ -41,7 +41,7 @@
                </padding>
             </RadioButton>
             <Separator opacity="0.0" orientation="VERTICAL" prefHeight="42.0" prefWidth="0.0" />
-            <Button fx:id="btn_dateneingabe" mnemonicParsing="false" prefHeight="41.0" prefWidth="167.0" styleClass="sideMenuButton" stylesheets="@Style.css" text="Dateneingabe">
+            <Button fx:id="btn_start" mnemonicParsing="false" prefHeight="41.0" prefWidth="167.0" styleClass="sideMenuButton" stylesheets="@Style.css" text="START">
                <graphic>
                   <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -82,36 +82,51 @@
                      <children>
                         <Label fx:id="lb_gewicht" alignment="CENTER" prefHeight="18.0" prefWidth="223.0" styleClass="MenuText" stylesheets="@Style.css" text="Gewicht (in kg)" />
                         <TextField fx:id="tf_gewicht" prefHeight="26.0" prefWidth="12.0" />
-                        <Label fx:id="lb_geschwindigkeit" alignment="CENTER" prefHeight="18.0" prefWidth="242.0" styleClass="MenuText" stylesheets="@Style.css" text="Geschwindigkeit (in km/h)" />
-                        <TextField fx:id="tf_geschwindigkeit" />
-                     </children>
-                  </VBox>
-                  <Separator opacity="0.0" prefWidth="20.0" />
-                  <VBox maxWidth="1.7976931348623157E308" prefHeight="118.0" prefWidth="142.0">
-                     <children>
                         <Label fx:id="lb_impuls" alignment="CENTER" prefHeight="18.0" prefWidth="223.0" styleClass="MenuText" stylesheets="@Style.css" text="Impuls (in N/m)" />
                         <TextField fx:id="tf_impuls" />
-                        <Label fx:id="lb_energie" alignment="CENTER" prefHeight="18.0" prefWidth="223.0" styleClass="MenuText" stylesheets="@Style.css" text="Energie (in J)" />
-                        <TextField fx:id="tf_energie" />
                      </children>
                   </VBox>
                   <Separator opacity="0.0" prefWidth="20.0" />
                   <VBox maxWidth="1.7976931348623157E308" prefHeight="118.0" prefWidth="142.0">
                      <children>
+                        <Label fx:id="lb_geschwindigkeit" alignment="CENTER" prefHeight="18.0" prefWidth="242.0" styleClass="MenuText" stylesheets="@Style.css" text="Geschwindigkeit (in km/h)" />
+                        <TextField fx:id="tf_geschwindigkeit" />
+                        <Label fx:id="lb_fahrtrichtung" alignment="CENTER" prefHeight="18.0" prefWidth="223.0" styleClass="MenuText" stylesheets="@Style.css" text="Fahrtrichtung" />
+                        <ChoiceBox fx:id="cb_fahrtrichtung" prefWidth="150.0">
+                           <cursor>
+                              <Cursor fx:constant="DEFAULT" />
+                           </cursor>
+                        </ChoiceBox>
+                     </children>
+                  </VBox>
+                  <Separator opacity="0.0" prefWidth="20.0" />
+                  <VBox maxWidth="1.7976931348623157E308" prefHeight="118.0" prefWidth="142.0">
+                     <children>
+                        <Label fx:id="lb_energie" alignment="CENTER" prefHeight="18.0" prefWidth="223.0" styleClass="MenuText" stylesheets="@Style.css" text="Energie (in J)" />
+                        <TextField fx:id="tf_energie" />
                         <Label fx:id="lb_fahrzeugtyp" alignment="CENTER" prefHeight="18.0" prefWidth="223.0" styleClass="MenuText" stylesheets="@Style.css" text="Fahrzeugtyp" />
                         <ChoiceBox fx:id="cb_fahrzeugtyp" prefWidth="150.0">
                            <cursor>
                               <Cursor fx:constant="DEFAULT" />
                            </cursor></ChoiceBox>
+                     </children>
+                  </VBox>
+                  <Separator opacity="0.0" prefWidth="20.0" />
+                  <VBox maxWidth="1.7976931348623157E308" prefHeight="118.0" prefWidth="142.0">
+                     <children>
+                        <Label fx:id="lb_startpunkt" alignment="CENTER" prefHeight="18.0" prefWidth="223.0" styleClass="MenuText" stylesheets="@Style.css" text="Startpunkt (in m)" />
+                        <TextField fx:id="tf_startpunkt" />
                         <Label fx:id="lb_fahrzeugfarbe" alignment="CENTER" prefHeight="18.0" prefWidth="223.0" styleClass="MenuText" stylesheets="@Style.css" text="Fahrzeugfarbe" />
                         <ChoiceBox fx:id="cb_fahrzeugfarbe" prefWidth="150.0" />
                      </children>
                   </VBox>
-                  <Separator opacity="0.0" prefWidth="20.0" />
-                  <VBox alignment="CENTER" maxWidth="1.7976931348623157E308" prefHeight="118.0" prefWidth="142.0">
+                  <VBox alignment="BOTTOM_CENTER" maxWidth="1.7976931348623157E308" prefHeight="137.0" prefWidth="142.0">
                      <children>
-                        <Button fx:id="btn_parameterspeichern" alignment="CENTER" mnemonicParsing="false" prefHeight="26.0" prefWidth="90.0" text="Speichern" />
+                        <Button fx:id="btn_parameterspeichern" alignment="CENTER" mnemonicParsing="false" onAction="#speichereParameter" prefHeight="26.0" prefWidth="90.0" text="Speichern" />
                      </children>
+                     <padding>
+                        <Insets bottom="30.0" />
+                     </padding>
                   </VBox>
                </children>
             </HBox>
@@ -121,7 +136,7 @@
    <center>
       <Pane prefHeight="200.0" prefWidth="200.0" styleClass="pane" stylesheets="@Style.css" BorderPane.alignment="CENTER">
          <children>
-            <ToggleButton fx:id="btn_fahrzeug1" contentDisplay="BOTTOM" graphicTextGap="0.0" layoutX="14.0" layoutY="198.0" mnemonicParsing="false" onMouseClicked="#ladeParameter" selected="true" styleClass="fahrzeugButton" stylesheets="@Style.css" text="Fahrzeug 1">
+            <ToggleButton fx:id="tbtn_fahrzeug1" contentDisplay="BOTTOM" graphicTextGap="0.0" layoutX="14.0" layoutY="198.0" mnemonicParsing="false" onMouseClicked="#ladeParameter" selected="true" styleClass="fahrzeugButton" stylesheets="@Style.css" text="Fahrzeug 1">
                <graphic>
                   <ImageView fx:id="iv_fahrzeug1" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -133,7 +148,7 @@
                   <ToggleGroup fx:id="fahrzeug" />
                </toggleGroup>
             </ToggleButton>
-            <ToggleButton fx:id="btn_fahrzeug2" contentDisplay="BOTTOM" graphicTextGap="0.0" layoutX="522.0" layoutY="198.0" mnemonicParsing="false" onMouseClicked="#ladeParameter" styleClass="fahrzeugButton" stylesheets="@Style.css" text="Fahrzeug 2" toggleGroup="$fahrzeug">
+            <ToggleButton fx:id="tbtn_fahrzeug2" contentDisplay="BOTTOM" graphicTextGap="0.0" layoutX="522.0" layoutY="198.0" mnemonicParsing="false" onMouseClicked="#ladeParameter" styleClass="fahrzeugButton" stylesheets="@Style.css" text="Fahrzeug 2" toggleGroup="$fahrzeug">
                <graphic>
                   <ImageView fx:id="iv_fahrzeug2" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                      <image>

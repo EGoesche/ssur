@@ -10,7 +10,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
@@ -30,7 +33,7 @@ public class HomeController
     @FXML private Label lb_programmname;
     @FXML private RadioButton rbtn_simulation;
     @FXML private RadioButton rbtn_rekonstruktion;
-    @FXML private Button btn_dateneingabe;
+    @FXML private Button btn_start;
     @FXML private Button btn_einstellungen;
     @FXML private Label lb_version;
     
@@ -47,24 +50,32 @@ public class HomeController
     @FXML private ChoiceBox<String> cb_fahrzeugtyp;
     @FXML private Label lb_fahrzeugfarbe;
     @FXML private ChoiceBox<String> cb_fahrzeugfarbe;
+    @FXML private Label lb_fahrtrichtung;
+    @FXML private ChoiceBox<String> cb_fahrtrichtung;
+    @FXML private Label lb_startpunkt;
+    @FXML private TextField tf_startpunkt;
     @FXML private Button btn_parameterspeichern;
     
     //Items im Pane
-    @FXML private ToggleButton btn_fahrzeug1;
-    @FXML private ToggleButton btn_fahrzeug2;
+    @FXML private ToggleButton tbtn_fahrzeug1;
+    @FXML private ToggleButton tbtn_fahrzeug2;
     @FXML private ImageView iv_fahrzeug1;
     @FXML private ImageView iv_fahrzeug2;
     
     //ObservableListen fuer ChoiceBoxen
     ObservableList<String> fahrzeugtypen = FXCollections.observableArrayList("PKW", "LKW");
     ObservableList<String> fahrzeugfarben = FXCollections.observableArrayList("rot", "blau", "grün", "schwarz");
+    ObservableList<String> fahrtrichtungen = FXCollections.observableArrayList("rechts", "links");
     
 	//Die zu kollidierenen Fahrzeuge werden erstellt
 	Fahrzeug f1 = new Fahrzeug();
 	Fahrzeug f2 = new Fahrzeug();
 	
+	
     /**
      * Initialisierungsmethode
+     * In dieser Methode werden die passenden Items den ChoiceBoxen zugeordnet, Tooltipps werden erstellt und die ersten Parameter werden
+     * in die TextFielder und ChoiceBoxen geladen.
      */
     @FXML
     public void initialize()
@@ -72,20 +83,20 @@ public class HomeController
     	//ChoiceBoxen in der Parameterleiste werden gefuellt
     	cb_fahrzeugtyp.setItems(fahrzeugtypen);
     	cb_fahrzeugfarbe.setItems(fahrzeugfarben);
+    	cb_fahrtrichtung.setItems(fahrtrichtungen);
     	
     	//Tooltipps werden erstellt
     	cb_fahrzeugtyp.setTooltip(new Tooltip("Wählen Sie den Typ des aktuellen Fahrzeuges."));
     	cb_fahrzeugfarbe.setTooltip(new Tooltip("Wählen Sie eine Farbe für das aktuelle Fahrzeug."));
+    	cb_fahrtrichtung.setTooltip(new Tooltip("Wählen Sie die Fahrtrichtung des aktuellen Fahrzeuges."));
     	
-    	
-    	
-    	//Parameter des beim Programmstart ausgewaehlten Fahrzeug werden  geladen
+    	//Parameter es ersten Fahrzeuges laden (standardmaessig)
     	ladeParameter(f1);
-    	
     }
     
     
     /**
+     * Zur Einstellungs-Scene wechseln
      * Methode fuer den Wechsel zur Scene Einstellungen
      * @throws IOException 
      */
@@ -103,22 +114,72 @@ public class HomeController
     }
     
     
+    /**
+     * Parameter speichern
+     * Methode fuer das Speichern der eingegebenen Parameter. Je nachdem welches Fahrzeug ausgewaehlt wurde werden die Eingaben
+     * auf dieses gespeichert. Ist kein Fahrzeug ausgewaehlt, wird eine Fehlermeldung ausgegeben.
+     * @param event
+     * @throws IOException
+     */
     @FXML
     public void speichereParameter(ActionEvent event) throws IOException
     {
-    	//if f1 angewaehlt ... if f2 angewaehlt ...
+    	if (tbtn_fahrzeug1.isSelected())
+    	{
+    		f1.setGewicht(Float.parseFloat(tf_gewicht.getText()));
+    		f1.setGeschwindigkeit(Float.parseFloat(tf_geschwindigkeit.getText()));
+    		f1.setImpuls(Float.parseFloat(tf_impuls.getText()));
+    		f1.setEkin(Float.parseFloat(tf_energie.getText()));
+    		f1.setFahrzeugtyp(cb_fahrzeugtyp.getValue());
+    		f1.setFarbcode(cb_fahrzeugfarbe.getValue());
+    		f1.setFahrtrichtung(cb_fahrtrichtung.getValue());
+    		f1.setStartpunkt(Float.parseFloat(tf_startpunkt.getText()));
+    	}
+    	
+    	else if (tbtn_fahrzeug2.isSelected())
+    	{
+    		f2.setGewicht(Float.parseFloat(tf_gewicht.getText()));
+    		f2.setGeschwindigkeit(Float.parseFloat(tf_geschwindigkeit.getText()));
+    		f2.setImpuls(Float.parseFloat(tf_impuls.getText()));
+    		f2.setEkin(Float.parseFloat(tf_energie.getText()));
+    		f2.setFahrzeugtyp(cb_fahrzeugtyp.getValue());
+    		f2.setFarbcode(cb_fahrzeugfarbe.getValue());
+    		f2.setFahrtrichtung(cb_fahrtrichtung.getValue());
+    		f2.setStartpunkt(Float.parseFloat(tf_startpunkt.getText()));
+    	}
+    	else
+    	{
+    		Alert alert = new Alert(AlertType.ERROR);
+    		alert.setTitle("Fehlermeldung");
+    		alert.setHeaderText("Fehler beim Speichern");
+    		alert.setContentText("Bitte wählen Sie zuerst ein Fahrzeug!");
+    		alert.showAndWait();
+    	}
     }
     
     
     /**
-     * Methode fuer die Abfrage des aktuellen Inhaltes einer ChoiceBox
-     * @param choiceBox
-     * @return
+     * Parameter laden
+     * @param event
      */
-    public String getChoiceBox(ChoiceBox<String> choiceBox)
+    @FXML
+    public void ladeParameter(MouseEvent event)
     {
-    	String value = choiceBox.getValue();
-    	return value;
+    	ToggleButton tbtn = (ToggleButton) event.getSource();
+    	if (tbtn == tbtn_fahrzeug1) {ladeParameter(f1);}
+    	if (tbtn == tbtn_fahrzeug2) {ladeParameter(f2);}
+    }
+    
+    public void ladeParameter(Fahrzeug fahrzeug)
+    {
+ 	   setTextField(tf_gewicht, Float.toString(fahrzeug.getGewicht()));
+ 	   setTextField(tf_geschwindigkeit, Float.toString(fahrzeug.getGeschwindigkeit()));
+ 	   setChoiceBox(cb_fahrtrichtung, fahrzeug.getFahrtrichtung());
+ 	   setTextField(tf_impuls, Float.toString(fahrzeug.getImpuls()));
+ 	   setTextField(tf_energie, Float.toString(fahrzeug.getEkin()));
+ 	   setChoiceBox(cb_fahrzeugtyp, fahrzeug.getFahrzeugtyp());
+ 	   setChoiceBox(cb_fahrzeugfarbe, fahrzeug.getFarbcode());
+ 	   setTextField(tf_startpunkt, Float.toString(fahrzeug.getStartpunkt()));
     }
     
     
@@ -131,19 +192,7 @@ public class HomeController
     {
     	choiceBox.setValue(value);
     }
-    
-    
-    /**
-     * Methode fuer die Abfrage des aktuellen Inhaltes eines TextFields
-     * @param textField
-     * @return
-     */
-    public String getTextField(TextField textField)
-    {
-    	String value = textField.getText();
-    	return value;
-    }
-    
+     
     
     /**
      * Methode um Inhalt fuer ein TextField setzen zu koennen
@@ -153,24 +202,6 @@ public class HomeController
     public void setTextField(TextField textField, String value)
     {
     	textField.setText(value);
-    }
-    
-    @FXML
-    public void ladeParameter(MouseEvent event)
-    {
-    	ToggleButton btn = (ToggleButton) event.getSource();
-    	if (btn == btn_fahrzeug1) {ladeParameter(f1);}
-    	if (btn == btn_fahrzeug2) {ladeParameter(f2);}
-    }
-    
-    public void ladeParameter(Fahrzeug fahrzeug)
-    {
- 	   setTextField(tf_gewicht, Float.toString(fahrzeug.getGewicht()));
- 	   setTextField(tf_geschwindigkeit, Float.toString(fahrzeug.getGeschwindigkeit()));
- 	   setTextField(tf_impuls, Float.toString(fahrzeug.getImpuls()));
- 	   setTextField(tf_energie, Float.toString(fahrzeug.getEkin()));
- 	   setChoiceBox(cb_fahrzeugtyp, fahrzeug.getFahrzeugtyp());
- 	   setChoiceBox(cb_fahrzeugfarbe, fahrzeug.getFarbcode());
     }
     
     

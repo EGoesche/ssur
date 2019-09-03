@@ -8,7 +8,7 @@ package ssur;
 public class Fahrzeug 
 {
 	private float geschwindigkeit; //in km/h
-	private int fahrtrichtung;
+	private String fahrtrichtung;
 	private float gewicht; //in kg
 	private float startpunkt; //in m
 	private String farbcode;
@@ -19,7 +19,7 @@ public class Fahrzeug
 	public Fahrzeug()
 	{
 		geschwindigkeit = 0;
-		fahrtrichtung = 0;
+		fahrtrichtung = "rechts";
 		gewicht = 0;
 		startpunkt = 0;
 		farbcode = "schwarz";
@@ -28,7 +28,7 @@ public class Fahrzeug
 		ekin = 0;		
 	}
 	
-	public Fahrzeug(float geschwindigkeit, int fahrtrichtung, float gewicht, float startpunkt, String farbcode, String fahrzeugtyp, float impuls, float ekin)
+	public Fahrzeug(float geschwindigkeit, String fahrtrichtung, float gewicht, float startpunkt, String farbcode, String fahrzeugtyp, float impuls, float ekin)
 	{
 		this.geschwindigkeit = geschwindigkeit;
 		this.fahrtrichtung = fahrtrichtung;
@@ -44,8 +44,8 @@ public class Fahrzeug
 	public float getGeschwindigkeit() {return geschwindigkeit;}
 	public void setGeschwindigkeit(float geschwindigkeit) {this.geschwindigkeit = geschwindigkeit;}
 	
-	public int getFahrtrichtung() {return fahrtrichtung;}
-	public void setFahrtrichtung(int fahrtrichtung) {this.fahrtrichtung = fahrtrichtung;}
+	public String getFahrtrichtung() {return fahrtrichtung;}
+	public void setFahrtrichtung(String fahrtrichtung) {this.fahrtrichtung = fahrtrichtung;}
 	
 	public float getGewicht() {return gewicht;}
 	public void setGewicht(float gewicht) {this.gewicht = gewicht;}
