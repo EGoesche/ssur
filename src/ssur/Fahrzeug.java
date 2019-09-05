@@ -11,7 +11,6 @@ public class Fahrzeug
 	private String fahrtrichtung;
 	private float gewicht; //in kg
 	private float startpunkt; //in m
-	private String farbcode;
 	private String fahrzeugtyp;
 	private float impuls;
 	private float ekin;
@@ -22,7 +21,6 @@ public class Fahrzeug
 		fahrtrichtung = "rechts";
 		gewicht = 0;
 		startpunkt = 0;
-		farbcode = "schwarz";
 		fahrzeugtyp = "PKW";
 		impuls = 0;
 		ekin = 0;		
@@ -34,7 +32,6 @@ public class Fahrzeug
 		this.fahrtrichtung = fahrtrichtung;
 		this.gewicht = gewicht;
 		this.startpunkt = startpunkt;
-		this.farbcode = farbcode;
 		this.fahrzeugtyp = fahrzeugtyp;
 		this.impuls = impuls;
 		this.ekin = ekin;
@@ -52,9 +49,6 @@ public class Fahrzeug
 	
 	public float getStartpunkt() {return startpunkt;}
 	public void setStartpunkt(float startpunkt) {this.startpunkt = startpunkt;}
-	
-	public String getFarbcode() {return farbcode;}
-	public void setFarbcode(String farbcode) {this.farbcode = farbcode;}
 	
 	public String getFahrzeugtyp() {return fahrzeugtyp;}
 	public void setFahrzeugtyp(String fahrzeugtyp) {this.fahrzeugtyp = fahrzeugtyp;}

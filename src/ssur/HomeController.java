@@ -2,6 +2,7 @@ package ssur;
 
 import java.io.IOException;
 
+import javafx.animation.PathTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -19,9 +20,14 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.Tooltip;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.shape.CubicCurveTo;
+import javafx.scene.shape.MoveTo;
+import javafx.scene.shape.Path;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 public class HomeController
 {
@@ -44,8 +50,6 @@ public class HomeController
     @FXML private TextField tf_energie;
     @FXML private Label lb_fahrzeugtyp;
     @FXML private ChoiceBox<String> cb_fahrzeugtyp;
-    @FXML private Label lb_fahrzeugfarbe;
-    @FXML private ChoiceBox<String> cb_fahrzeugfarbe;
     @FXML private Label lb_fahrtrichtung;
     @FXML private ChoiceBox<String> cb_fahrtrichtung;
     @FXML private Label lb_startpunkt;
@@ -59,13 +63,22 @@ public class HomeController
     @FXML private ImageView iv_fahrzeug2;
     
     //ObservableListen fuer ChoiceBoxen
-    ObservableList<String> fahrzeugtypen = FXCollections.observableArrayList("PKW", "LKW");
-    ObservableList<String> fahrzeugfarben = FXCollections.observableArrayList("rot", "blau", "grün", "schwarz");
+    ObservableList<String> fahrzeugtypen = FXCollections.observableArrayList("PKW", "LKW", "E-Scooter","Fahrrad");
     ObservableList<String> fahrtrichtungen = FXCollections.observableArrayList("rechts", "links");
     
 	//Die zu kollidierenen Fahrzeuge werden erstellt
 	Fahrzeug f1 = new Fahrzeug();
 	Fahrzeug f2 = new Fahrzeug();
+	
+	//Bilder fuer die Fahrzeuge
+	Image auto_s = new Image("ssur/icons/auto_s.png");
+	Image auto_s_r = new Image("ssur/icons/auto_s_r.png");
+	Image lkw_s = new Image("ssur/icons/lkw_s.png");
+	Image lkw_s_r = new Image("ssur/icons/lkw_s_r.png");
+	Image escooter_s = new Image("ssur/icons/escooter_s.png");
+	Image escooter_s_r = new Image("ssur/icons/escooter_s_r.png");
+	Image fahrrad_s = new Image("ssur/icons/fahrrad_s.png");
+	Image fahrrad_s_r = new Image("ssur/icons/fahrrad_s_r.png");
 	
 	
     /**
@@ -78,12 +91,10 @@ public class HomeController
     {
     	//ChoiceBoxen in der Parameterleiste werden gefuellt
     	cb_fahrzeugtyp.setItems(fahrzeugtypen);
-    	cb_fahrzeugfarbe.setItems(fahrzeugfarben);
     	cb_fahrtrichtung.setItems(fahrtrichtungen);
     	
     	//Tooltipps werden erstellt
     	cb_fahrzeugtyp.setTooltip(new Tooltip("Wählen Sie den Typ des aktuellen Fahrzeuges."));
-    	cb_fahrzeugfarbe.setTooltip(new Tooltip("Wählen Sie eine Farbe für das aktuelle Fahrzeug."));
     	cb_fahrtrichtung.setTooltip(new Tooltip("Wählen Sie die Fahrtrichtung des aktuellen Fahrzeuges."));
     	
     	//Parameter es ersten Fahrzeuges laden (standardmaessig)
@@ -110,6 +121,12 @@ public class HomeController
     }
     
     
+    @FXML
+    public void goToRekonstruktion(ActionEvent event) throws IOException
+    {
+    	
+    }
+    
     /**
      * Parameter speichern
      * Methode fuer das Speichern der eingegebenen Parameter. Je nachdem welches Fahrzeug ausgewaehlt wurde werden die Eingaben
@@ -122,29 +139,86 @@ public class HomeController
     {
     	if (tbtn_fahrzeug1.isSelected())
     	{
+    		//Lade alle Parameter von Fahrzeug 1 in die Kontrollelemente
     		f1.setGewicht(Float.parseFloat(tf_gewicht.getText()));
     		f1.setGeschwindigkeit(Float.parseFloat(tf_geschwindigkeit.getText()));
     		f1.setImpuls(Float.parseFloat(tf_impuls.getText()));
     		f1.setEkin(Float.parseFloat(tf_energie.getText()));
     		f1.setFahrzeugtyp(cb_fahrzeugtyp.getValue());
-    		f1.setFarbcode(cb_fahrzeugfarbe.getValue());
     		f1.setFahrtrichtung(cb_fahrtrichtung.getValue());
     		f1.setStartpunkt(Float.parseFloat(tf_startpunkt.getText()));
+    		
+    		//Setze das Icon fuer das Fahrzeug
+    		switch(f1.getFahrzeugtyp())
+    		{
+    		case "PKW":
+    			if (f1.getFahrtrichtung() == "rechts") {iv_fahrzeug1.setImage(auto_s);}
+    			else {iv_fahrzeug1.setImage(auto_s_r);}
+    			break;
+    			
+    		case "LKW":
+    			if (f1.getFahrtrichtung() == "rechts") {iv_fahrzeug1.setImage(lkw_s);}
+    			else {iv_fahrzeug1.setImage(lkw_s_r);}
+    			break;
+    			
+    		case "E-Scooter":
+    			if (f1.getFahrtrichtung() == "rechts") {iv_fahrzeug1.setImage(escooter_s);}
+    			else {iv_fahrzeug1.setImage(escooter_s_r);}
+    			break;
+    			
+    		case "Fahrrad":
+    			if (f1.getFahrtrichtung() == "rechts") {iv_fahrzeug1.setImage(fahrrad_s);}
+    			else {iv_fahrzeug1.setImage(fahrrad_s_r);}
+    			break;
+    			
+    		default:
+    			System.out.println("Fehler beim Wechseln des Fahrzeugicons!");
+    			break;
+    		}
     	}
     	
     	else if (tbtn_fahrzeug2.isSelected())
     	{
+    		//Lade alle Parameter von Fahrzeug 2 in die Kontrollelemente
     		f2.setGewicht(Float.parseFloat(tf_gewicht.getText()));
     		f2.setGeschwindigkeit(Float.parseFloat(tf_geschwindigkeit.getText()));
     		f2.setImpuls(Float.parseFloat(tf_impuls.getText()));
     		f2.setEkin(Float.parseFloat(tf_energie.getText()));
     		f2.setFahrzeugtyp(cb_fahrzeugtyp.getValue());
-    		f2.setFarbcode(cb_fahrzeugfarbe.getValue());
     		f2.setFahrtrichtung(cb_fahrtrichtung.getValue());
     		f2.setStartpunkt(Float.parseFloat(tf_startpunkt.getText()));
+    		
+    		//Setze das Icon fuer das Fahrzeug
+    		switch(f2.getFahrzeugtyp())
+    		{
+    		case "PKW":
+    			if (f2.getFahrtrichtung() == "rechts") {iv_fahrzeug2.setImage(auto_s);}
+    			else {iv_fahrzeug2.setImage(auto_s_r);}
+    			break;
+    			
+    		case "LKW":
+    			if (f2.getFahrtrichtung() == "rechts") {iv_fahrzeug2.setImage(lkw_s);}
+    			else {iv_fahrzeug2.setImage(lkw_s_r);}
+    			break;
+    			
+    		case "E-Scooter":
+    			if (f2.getFahrtrichtung() == "rechts") {iv_fahrzeug2.setImage(escooter_s);}
+    			else {iv_fahrzeug2.setImage(escooter_s_r);}
+    			break;
+    			
+    		case "Fahrrad":
+    			if (f2.getFahrtrichtung() == "rechts") {iv_fahrzeug2.setImage(fahrrad_s);}
+    			else {iv_fahrzeug2.setImage(fahrrad_s_r);}
+    			break;
+    			
+    		default:
+    			System.out.println("Fehler beim Wechseln des Fahrzeugicons!");
+    			break;
+    		}
     	}
     	else
     	{
+    		//Falls kein Fahrzeug gewaehlt wurde wird ein Fehler ausgegeben
     		Alert alert = new Alert(AlertType.ERROR);
     		alert.setTitle("Fehlermeldung");
     		alert.setHeaderText("Fehler beim Speichern");
@@ -172,7 +246,8 @@ public class HomeController
     {
     	float aufprallort = berechneAufprallort(f1.getGeschwindigkeit(), f2.getGeschwindigkeit(), f1.getFahrtrichtung(), f2.getFahrtrichtung(), f1.getStartpunkt(), f2.getStartpunkt());
     	float aufprallzeitpunkt = berechneAufprallzeitpunkt(f1.getGeschwindigkeit(), f2.getGeschwindigkeit(), f1.getFahrtrichtung(), f2.getFahrtrichtung(), f1.getStartpunkt(), f2.getStartpunkt());
-    	System.out.println("Ort: " + aufprallort + "\n" + "Zeit: " + aufprallzeitpunkt);
+    	System.out.println("Ort: " + rundeFloat(aufprallort) + "\n" + "Zeit: " + rundeFloat(aufprallzeitpunkt));
+    	starteAnimation();
     }
     
     
@@ -184,8 +259,21 @@ public class HomeController
  	   setTextField(tf_impuls, Float.toString(fahrzeug.getImpuls()));
  	   setTextField(tf_energie, Float.toString(fahrzeug.getEkin()));
  	   setChoiceBox(cb_fahrzeugtyp, fahrzeug.getFahrzeugtyp());
- 	   setChoiceBox(cb_fahrzeugfarbe, fahrzeug.getFarbcode());
  	   setTextField(tf_startpunkt, Float.toString(fahrzeug.getStartpunkt()));
+    }
+    
+    public void starteAnimation()
+    {
+    	Path path = new Path();
+    	path.getElements().add(new MoveTo(20, 120));
+    	path.getElements().add(new CubicCurveTo(180, 60, 250, 340, 420, 240));
+    	PathTransition ptr = new PathTransition();
+    	ptr.setDuration(Duration.seconds(6));
+        ptr.setPath(path);
+        ptr.setNode(iv_fahrzeug1);
+        ptr.setCycleCount(2);
+        ptr.setAutoReverse(true);
+        ptr.play();     
     }
     
     
@@ -252,19 +340,19 @@ public class HomeController
     			
     	else if (geschw1 == 0 ^ geschw2 == 0) //Eines der beiden Fahrzeuge steht still, aber nicht beide
     	{
-    		if (geschw1 == 0) {return (Math.abs(startp1 - startp2) / geschw2);}
-    		else {return (Math.abs(startp1 - startp2) / geschw1);}
+    		if (geschw1 == 0) {return (Math.abs(startp1 - startp2) / (geschw2 / 3.6f));}
+    		else {return (Math.abs(startp1 - startp2) / (geschw1 / 3.6f));}
     	}
     	
     	else if (fahrtricht1 != fahrtricht2) //Die Fahrzeuge fahren sich entgegen
     	{
-    	   	float geschwindigkeit = Math.abs(geschw1) + Math.abs(geschw2);
+    	   	float geschwindigkeit = Math.abs((geschw1 / 3.6f)) + Math.abs((geschw2 / 3.6f));
     	   	float strecke = Math.abs(startp1) + Math.abs(startp2);
     	   	return (strecke / geschwindigkeit);
     	}
     	else //Die Fahrzeuge fahren in die selbe Richtung
     	{
-    		return Math.abs((startp1 - startp2) / Math.abs(geschw1 - geschw2));
+    		return Math.abs((startp1 - startp2) / Math.abs((geschw1 / 3.6f) - (geschw2 / 3.6f)));
     	}
     }
     
@@ -304,17 +392,17 @@ public class HomeController
     		
     	else if (fahrtricht1 != fahrtricht2) //Die Fahrzeuge fahren sich entgegen
     	{
-    		float geschwindigkeit = Math.abs(geschw1) + Math.abs(geschw2);
+    		float geschwindigkeit = Math.abs((geschw1 / 3.6f)) + Math.abs((geschw2 / 3.6f));
     	    float strecke = Math.abs(startp1) + Math.abs(startp2);
     	    float aufprallzeitpunkt = (strecke / geschwindigkeit);
     	    	
-    	    return (aufprallzeitpunkt * geschw1);
+    	    return (aufprallzeitpunkt * (geschw1 / 3.6f));
     	}
     	else //Die Fahrzeuge fahren in die selbe Richtung
     	{
-    		float aufprallzeitpunkt = Math.abs((startp1 - startp2) / Math.abs(geschw1 - geschw2));
+    		float aufprallzeitpunkt = Math.abs((startp1 - startp2) / Math.abs((geschw1 / 3.6f) - (geschw2 / 3.6f)));
     			
-    		return (geschw1 * aufprallzeitpunkt);
+    		return ((geschw1 / 3.6f) * aufprallzeitpunkt);
     	}
     }
         

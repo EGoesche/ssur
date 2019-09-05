@@ -116,8 +116,6 @@
                      <children>
                         <Label fx:id="lb_startpunkt" alignment="CENTER" prefHeight="18.0" prefWidth="223.0" styleClass="MenuText" stylesheets="@Style.css" text="Startpunkt (in m)" />
                         <TextField fx:id="tf_startpunkt" />
-                        <Label fx:id="lb_fahrzeugfarbe" alignment="CENTER" prefHeight="18.0" prefWidth="223.0" styleClass="MenuText" stylesheets="@Style.css" text="Fahrzeugfarbe" />
-                        <ChoiceBox fx:id="cb_fahrzeugfarbe" prefWidth="150.0" />
                      </children>
                   </VBox>
                   <VBox alignment="BOTTOM_CENTER" maxWidth="1.7976931348623157E308" prefHeight="137.0" prefWidth="142.0">
@@ -140,7 +138,7 @@
                <graphic>
                   <ImageView fx:id="iv_fahrzeug1" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@icons/auto.png" />
+                        <Image url="@icons/auto_s.png" />
                      </image>
                   </ImageView>
                </graphic>
@@ -152,7 +150,7 @@
                <graphic>
                   <ImageView fx:id="iv_fahrzeug2" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@icons/auto_r.png" />
+                        <Image url="@icons/auto_s_r.png" />
                      </image>
                   </ImageView>
                </graphic>
