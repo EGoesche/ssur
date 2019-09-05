@@ -2,6 +2,7 @@ package ssur;
 
 import java.io.IOException;
 
+import javafx.animation.FadeTransition;
 import javafx.animation.PathTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -64,6 +65,8 @@ public class HomeController
     @FXML private ToggleButton tbtn_fahrzeug2;
     @FXML private ImageView iv_fahrzeug1;
     @FXML private ImageView iv_fahrzeug2;
+    @FXML private Label lb_aufprallort;
+    @FXML private Label lb_aufprallzeitpunkt;
     
     //ObservableListen fuer ChoiceBoxen
     ObservableList<String> fahrzeugtypen = FXCollections.observableArrayList("PKW", "LKW", "E-Scooter","Fahrrad");
@@ -99,6 +102,10 @@ public class HomeController
     	//Tooltipps werden erstellt
     	cb_fahrzeugtyp.setTooltip(new Tooltip("W‰hlen Sie den Typ des aktuellen Fahrzeuges."));
     	cb_fahrtrichtung.setTooltip(new Tooltip("W‰hlen Sie die Fahrtrichtung des aktuellen Fahrzeuges."));
+    	
+    	//Textlabel fuer die Berechnungen werden versteckt
+    	lb_aufprallort.setVisible(false);
+    	lb_aufprallzeitpunkt.setVisible(false);
     	
     	//Parameter es ersten Fahrzeuges laden (standardmaessig)
     	ladeParameter(f1);
@@ -276,6 +283,10 @@ public class HomeController
         
         ptr1.play();
         ptr2.play();
+        
+        //Label fuer die letzte Berechnung werden ausgeblendet
+        lb_aufprallort.setVisible(false);
+        lb_aufprallzeitpunkt.setVisible(false);
     }
     
     
@@ -285,7 +296,49 @@ public class HomeController
     	float aufprallort = berechneAufprallort(f1.getGeschwindigkeit(), f2.getGeschwindigkeit(), f1.getFahrtrichtung(), f2.getFahrtrichtung(), f1.getStartpunkt(), f2.getStartpunkt());
     	float aufprallzeitpunkt = berechneAufprallzeitpunkt(f1.getGeschwindigkeit(), f2.getGeschwindigkeit(), f1.getFahrtrichtung(), f2.getFahrtrichtung(), f1.getStartpunkt(), f2.getStartpunkt());
     	System.out.println("Ort: " + rundeFloat(aufprallort) + "\n" + "Zeit: " + rundeFloat(aufprallzeitpunkt));
-    	starteAnimation();
+    	
+    	if (aufprallort != -1.0 && aufprallzeitpunkt != -1.0) //Abfrage, ob Berechnung erfolgreich war
+    	{
+    		//Unnoetige Einblendung des Aufprallortes
+    		FadeTransition fadeInaufprallort = new FadeTransition(Duration.millis(1000));
+    		fadeInaufprallort.setNode(lb_aufprallort);
+    	    fadeInaufprallort.setFromValue(0.0);
+    	    fadeInaufprallort.setToValue(1.0);
+    	    fadeInaufprallort.setCycleCount(1);
+    	    fadeInaufprallort.setAutoReverse(false);
+    		lb_aufprallort.setVisible(true);
+    		fadeInaufprallort.playFromStart();
+    		
+    		//Unnoetige Einblendung des Aufprallzeitpunktes
+    		FadeTransition fadeInaufprallzeitpunkt = new FadeTransition(Duration.millis(1000));
+    		fadeInaufprallzeitpunkt.setNode(lb_aufprallzeitpunkt);
+    	    fadeInaufprallzeitpunkt.setFromValue(0.0);
+    	    fadeInaufprallzeitpunkt.setToValue(1.0);
+    	    fadeInaufprallzeitpunkt.setCycleCount(1);
+    	    fadeInaufprallzeitpunkt.setAutoReverse(false);
+        	lb_aufprallzeitpunkt.setVisible(true);
+    		fadeInaufprallzeitpunkt.playFromStart();
+    		
+    		starteAnimationFirst(); //Animation bis zum Stoss wird gestartet
+    		
+    		//Berechnungen werden in die Label geschrieben
+    		lb_aufprallort.setText("Aufprallort: " + rundeFloat(aufprallort) + "m");
+        	lb_aufprallzeitpunkt.setText("Aufprallzeitpunkt: " + rundeFloat(aufprallzeitpunkt) + "s");
+        	
+        	//Alle Fahrzeuge werden nicht mehr selektiert
+        	tbtn_fahrzeug1.setSelected(false);
+        	tbtn_fahrzeug2.setSelected(false);
+    	}
+    	else
+    	{
+    		//Falls Berechnung erfolglos war
+    		Alert alert = new Alert(AlertType.ERROR);
+    		alert.setTitle("Fehlermeldung");
+    		alert.setHeaderText("Fehler bei der Berechnung");
+    		alert.setContentText("Es kann zu keinem Zusammenstoﬂ der Fahrzeuge kommen!");
+    		alert.showAndWait();
+    	}
+    	
     }
     
     
@@ -309,7 +362,7 @@ public class HomeController
      * Animation starten
      * Methode fuer die Animation der beiden Fahrzeuge
      */
-    public void starteAnimation()
+    public void starteAnimationFirst()
     {
     	Path path1 = new Path();
     	path1.getElements().add(new MoveTo(76, 75));  //Startpunkt der Animation	
