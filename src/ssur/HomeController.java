@@ -8,6 +8,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Bounds;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -24,6 +25,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.CubicCurveTo;
+import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
 import javafx.stage.Stage;
@@ -55,6 +57,7 @@ public class HomeController
     @FXML private Label lb_startpunkt;
     @FXML private TextField tf_startpunkt;
     @FXML private Button btn_parameterspeichern;
+    @FXML private Button btn_zuruecksetzen;
     
     //Items im Pane
     @FXML private ToggleButton tbtn_fahrzeug1;
@@ -121,11 +124,17 @@ public class HomeController
     }
     
     
+    /**
+     * Wechsel in den Rekonstruktionsmodus
+     * @param event
+     * @throws IOException
+     */
     @FXML
     public void goToRekonstruktion(ActionEvent event) throws IOException
     {
     	
     }
+    
     
     /**
      * Parameter speichern
@@ -229,7 +238,7 @@ public class HomeController
     
     
     /**
-     * Parameter laden
+     * FXML Event-Methode um die Parameter des jeweiligen Fahrzeuges in die TextFelder bzw. in die ChoiceBoxen zu laden
      * @param event
      */
     @FXML
@@ -238,6 +247,35 @@ public class HomeController
     	ToggleButton tbtn = (ToggleButton) event.getSource();
     	if (tbtn == tbtn_fahrzeug1) {ladeParameter(f1);}
     	if (tbtn == tbtn_fahrzeug2) {ladeParameter(f2);}
+    }
+    
+    
+    @FXML
+    public void berechnungZuruecksetzen(ActionEvent event)
+    {
+    	//Fahrzeuge werden in Ausgangsposition gebracht
+    	Path path1 = new Path();
+    	path1.getElements().add(new MoveTo(275, 75));  //Startpunkt der Animation	
+    	path1.getElements().add(new LineTo(76, 75));
+    	
+    	Path path2 = new Path();
+    	path2.getElements().add(new MoveTo(-109, 75));  //Startpunkt der Animation	
+    	path2.getElements().add(new LineTo(76, 75));
+    	
+    	PathTransition ptr1 = new PathTransition();
+    	ptr1.setDuration(Duration.seconds(0.5));
+        ptr1.setPath(path1);
+        ptr1.setNode(iv_fahrzeug1);
+        ptr1.setAutoReverse(false);
+        
+        PathTransition ptr2 = new PathTransition();
+        ptr2.setDuration(Duration.seconds(0.5));
+        ptr2.setPath(path2);
+        ptr2.setNode(iv_fahrzeug2);
+        ptr2.setAutoReverse(false);
+        
+        ptr1.play();
+        ptr2.play();
     }
     
     
@@ -251,6 +289,10 @@ public class HomeController
     }
     
     
+    /**
+     * Parameter des jeweiligen Fahrzeuges werden in die TextFelder bzw. in die ChoiceBoxen geladen
+     * @param fahrzeug
+     */
     public void ladeParameter(Fahrzeug fahrzeug)
     {
  	   setTextField(tf_gewicht, Float.toString(fahrzeug.getGewicht()));
@@ -262,18 +304,38 @@ public class HomeController
  	   setTextField(tf_startpunkt, Float.toString(fahrzeug.getStartpunkt()));
     }
     
+    
+    /**
+     * Animation starten
+     * Methode fuer die Animation der beiden Fahrzeuge
+     */
     public void starteAnimation()
     {
-    	Path path = new Path();
-    	path.getElements().add(new MoveTo(20, 120));
-    	path.getElements().add(new CubicCurveTo(180, 60, 250, 340, 420, 240));
-    	PathTransition ptr = new PathTransition();
-    	ptr.setDuration(Duration.seconds(6));
-        ptr.setPath(path);
-        ptr.setNode(iv_fahrzeug1);
-        ptr.setCycleCount(2);
-        ptr.setAutoReverse(true);
-        ptr.play();     
+    	Path path1 = new Path();
+    	path1.getElements().add(new MoveTo(76, 75));  //Startpunkt der Animation	
+    	path1.getElements().add(new LineTo(275, 75));
+    	
+    	Path path2 = new Path();
+    	path2.getElements().add(new MoveTo(76, 75));  //Startpunkt der Animation	
+    	path2.getElements().add(new LineTo(-109, 75));
+    	
+    	PathTransition ptr1 = new PathTransition();
+    	ptr1.setDuration(Duration.seconds(2));
+        ptr1.setPath(path1);
+        ptr1.setNode(iv_fahrzeug1);
+        ptr1.setAutoReverse(false);
+        
+        PathTransition ptr2 = new PathTransition();
+        ptr2.setDuration(Duration.seconds(2));
+        ptr2.setPath(path2);
+        ptr2.setNode(iv_fahrzeug2);
+        ptr2.setAutoReverse(false);
+        
+        ptr1.play();
+        ptr2.play();
+        
+        
+        
     }
     
     
