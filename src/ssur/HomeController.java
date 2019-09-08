@@ -9,7 +9,6 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Bounds;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -25,7 +24,6 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.shape.CubicCurveTo;
 import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
@@ -163,6 +161,10 @@ public class HomeController
     		f1.setFahrzeugtyp(cb_fahrzeugtyp.getValue());
     		f1.setFahrtrichtung(cb_fahrtrichtung.getValue());
     		f1.setStartpunkt(Float.parseFloat(tf_startpunkt.getText()));
+    		if (f1.getImpuls() == 0.0f) {f1.setImpuls(berechneImpuls());} //Falls der Impuls nicht eingetragen wurde, wird er berechnet
+    		if (f1.getEkin() == 0.0f) {f1.setEkin(berechneEkin());} //Fals die Ekin nicht eingetragen wurde, wird sie berechnet
+    		
+    		ladeParameter(f1); //Parameter werden neu in die Felder geladen, da Berechnungen stattgefunden haben koennten
     		
     		//Setze das Icon fuer das Fahrzeug
     		switch(f1.getFahrzeugtyp())
@@ -203,6 +205,10 @@ public class HomeController
     		f2.setFahrzeugtyp(cb_fahrzeugtyp.getValue());
     		f2.setFahrtrichtung(cb_fahrtrichtung.getValue());
     		f2.setStartpunkt(Float.parseFloat(tf_startpunkt.getText()));
+    		if (f2.getImpuls() == 0.0f) {f2.setImpuls(berechneImpuls());} //Falls der Impuls nicht eingetragen wurde, wird er berechnet
+    		if (f2.getEkin() == 0.0f) {f2.setEkin(berechneEkin());} //Fals die Ekin nicht eingetragen wurde, wird sie berechnet
+    		
+    		ladeParameter(f2); //Parameter werden neu in die Felder geladen, da Berechnungen stattgefunden haben koennten
     		
     		//Setze das Icon fuer das Fahrzeug
     		switch(f2.getFahrzeugtyp())
@@ -260,33 +266,56 @@ public class HomeController
     @FXML
     public void berechnungZuruecksetzen(ActionEvent event)
     {
-    	//Fahrzeuge werden in Ausgangsposition gebracht
-    	Path path1 = new Path();
-    	path1.getElements().add(new MoveTo(275, 75));  //Startpunkt der Animation	
-    	path1.getElements().add(new LineTo(76, 75));
+    	if (lb_aufprallort.isVisible()) //Wenn dieses Label sichtbar ist, fand bereits eine Berechnung statt
+    	{
+    		//Fahrzeuge werden in Ausgangsposition gebracht
+    		Path path1 = new Path();
+    		path1.getElements().add(new MoveTo(275, 75));  //Startpunkt der Animation	
+    		path1.getElements().add(new LineTo(76, 75));
     	
-    	Path path2 = new Path();
-    	path2.getElements().add(new MoveTo(-109, 75));  //Startpunkt der Animation	
-    	path2.getElements().add(new LineTo(76, 75));
+    		Path path2 = new Path();
+    		path2.getElements().add(new MoveTo(-109, 75));  //Startpunkt der Animation	
+    		path2.getElements().add(new LineTo(76, 75));
     	
-    	PathTransition ptr1 = new PathTransition();
-    	ptr1.setDuration(Duration.seconds(0.5));
-        ptr1.setPath(path1);
-        ptr1.setNode(iv_fahrzeug1);
-        ptr1.setAutoReverse(false);
+    		PathTransition ptr1 = new PathTransition();
+    		ptr1.setDuration(Duration.seconds(0.5));
+    		ptr1.setPath(path1);
+    		ptr1.setNode(iv_fahrzeug1);
+    		ptr1.setAutoReverse(false);
+    		
+    		PathTransition ptr2 = new PathTransition();
+    		ptr2.setDuration(Duration.seconds(0.5));
+    		ptr2.setPath(path2);
+    		ptr2.setNode(iv_fahrzeug2);
+    		ptr2.setAutoReverse(false);
+    		
+    		ptr1.play();
+    		ptr2.play();
         
-        PathTransition ptr2 = new PathTransition();
-        ptr2.setDuration(Duration.seconds(0.5));
-        ptr2.setPath(path2);
-        ptr2.setNode(iv_fahrzeug2);
-        ptr2.setAutoReverse(false);
+    		//Label fuer die letzte Berechnung werden ausgeblendet
+    		lb_aufprallort.setVisible(false);
+    		lb_aufprallzeitpunkt.setVisible(false);
+    	}
         
-        ptr1.play();
-        ptr2.play();
-        
-        //Label fuer die letzte Berechnung werden ausgeblendet
-        lb_aufprallort.setVisible(false);
-        lb_aufprallzeitpunkt.setVisible(false);
+    	//Alle Parameter der Fahrzeuge werden zurueckgesetzt
+    	f1.setEkin(0);
+    	f1.setFahrtrichtung("rechts");
+    	f1.setFahrzeugtyp("PKW");
+    	f1.setGeschwindigkeit(0);
+    	f1.setGewicht(0);
+    	f1.setImpuls(0);
+    	f1.setStartpunkt(0);
+    	
+    	f2.setEkin(0);
+    	f2.setFahrtrichtung("links");
+    	f2.setFahrzeugtyp("PKW");
+    	f2.setGeschwindigkeit(0);
+    	f2.setGewicht(0);
+    	f2.setImpuls(0);
+    	f2.setStartpunkt(0);
+    	
+    	//Parameter werden neugeladen
+    	ladeParameter(f1);
     }
     
     
@@ -295,7 +324,7 @@ public class HomeController
     {
     	float aufprallort = berechneAufprallort(f1.getGeschwindigkeit(), f2.getGeschwindigkeit(), f1.getFahrtrichtung(), f2.getFahrtrichtung(), f1.getStartpunkt(), f2.getStartpunkt());
     	float aufprallzeitpunkt = berechneAufprallzeitpunkt(f1.getGeschwindigkeit(), f2.getGeschwindigkeit(), f1.getFahrtrichtung(), f2.getFahrtrichtung(), f1.getStartpunkt(), f2.getStartpunkt());
-    	System.out.println("Ort: " + rundeFloat(aufprallort) + "\n" + "Zeit: " + rundeFloat(aufprallzeitpunkt));
+    	System.out.println("Aufprallort: " + rundeFloat(aufprallort) + "\n" + "Aufprallzeitpunkt: " + rundeFloat(aufprallzeitpunkt));
     	
     	if (aufprallort != -1.0 && aufprallzeitpunkt != -1.0) //Abfrage, ob Berechnung erfolgreich war
     	{
@@ -328,6 +357,9 @@ public class HomeController
         	//Alle Fahrzeuge werden nicht mehr selektiert
         	tbtn_fahrzeug1.setSelected(false);
         	tbtn_fahrzeug2.setSelected(false);
+        	
+        	float nachstossgeschwindgkeit = (f1.getImpuls() + f2.getImpuls()) / (f1.getGewicht() + f2.getGewicht());
+        	System.out.println("Geschwindigkeit nach dem Stoﬂ: " + nachstossgeschwindgkeit);
     	}
     	else
     	{
@@ -404,6 +436,29 @@ public class HomeController
     }
     
     
+    /**
+     * Impuls berechnen
+     * Methode zum Berechnen des Impulses des ausgewaehlten Fahrzueges aus den aktuellen TextFields
+     * @return
+     */
+    public float berechneImpuls()
+    {
+    	if (cb_fahrtrichtung.getValue() == "links") {return (Float.parseFloat(tf_geschwindigkeit.getText()) * Float.parseFloat(tf_gewicht.getText())) * -1;} //Falls sich das Fahrzeug nach links bewegt, ist die Geschwundigkeit negativ
+    	return Float.parseFloat(tf_geschwindigkeit.getText()) * Float.parseFloat(tf_gewicht.getText());
+    }
+    
+    
+    /**
+     * Kinetische Energie berechnen
+     * Methode zum Berechnen der kinetischen Energie desd ausgewaehlten Fahrzeuges aus den aktuellen TextFields
+     * @return
+     */
+    public float berechneEkin()
+    {
+    	return (Float.parseFloat(tf_gewicht.getText()) / 2.0f) * (Float.parseFloat(tf_geschwindigkeit.getText()) * Float.parseFloat(tf_geschwindigkeit.getText()));
+    }
+    
+     
     /**
      * Methode um Inhalt fuer eine ChoiceBox setzen zu koennen
      * @param choiceBox
