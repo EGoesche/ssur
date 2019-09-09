@@ -116,6 +116,12 @@
                      <children>
                         <Label fx:id="lb_startpunkt" alignment="CENTER" prefHeight="18.0" prefWidth="223.0" styleClass="MenuText" stylesheets="@Style.css" text="Startpunkt (in m)" />
                         <TextField fx:id="tf_startpunkt" />
+                        <Label fx:id="lb_untergrund" alignment="CENTER" prefHeight="18.0" prefWidth="223.0" styleClass="MenuText" stylesheets="@Style.css" text="Untergrund" />
+                        <ChoiceBox fx:id="cb_untergrund" prefWidth="150.0">
+                           <cursor>
+                              <Cursor fx:constant="DEFAULT" />
+                           </cursor>
+                        </ChoiceBox>
                      </children>
                   </VBox>
                   <VBox alignment="BOTTOM_CENTER" maxWidth="1.7976931348623157E308" prefHeight="137.0" prefWidth="142.0">
@@ -159,6 +165,7 @@
             </ToggleButton>
             <Label fx:id="lb_aufprallzeitpunkt" layoutX="304.0" layoutY="168.0" text="Aufprallzeitpunkt:" />
             <Label fx:id="lb_aufprallort" layoutX="321.0" layoutY="144.0" text="Aufprallort:" />
+            <Label fx:id="lb_anhalteweg" layoutX="318.0" layoutY="119.0" text="Anhalteweg:" />
          </children></Pane>
    </center>
 </BorderPane>

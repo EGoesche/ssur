@@ -55,6 +55,8 @@ public class HomeController
     @FXML private ChoiceBox<String> cb_fahrtrichtung;
     @FXML private Label lb_startpunkt;
     @FXML private TextField tf_startpunkt;
+    @FXML private Label lb_untergrund;
+    @FXML private ChoiceBox<String> cb_untergrund;
     @FXML private Button btn_parameterspeichern;
     @FXML private Button btn_zuruecksetzen;
     
@@ -65,10 +67,12 @@ public class HomeController
     @FXML private ImageView iv_fahrzeug2;
     @FXML private Label lb_aufprallort;
     @FXML private Label lb_aufprallzeitpunkt;
+    @FXML private Label lb_anhalteweg;
     
     //ObservableListen fuer ChoiceBoxen
     ObservableList<String> fahrzeugtypen = FXCollections.observableArrayList("PKW", "LKW", "E-Scooter","Fahrrad");
     ObservableList<String> fahrtrichtungen = FXCollections.observableArrayList("rechts", "links");
+    ObservableList<String> untergrunde = FXCollections.observableArrayList("Asphalt", "Beton", "Schotter", "Kopfsteinpflaster");
     
 	//Die zu kollidierenen Fahrzeuge werden erstellt
 	Fahrzeug f1 = new Fahrzeug();
@@ -84,10 +88,12 @@ public class HomeController
 	Image fahrrad_s = new Image("ssur/icons/fahrrad_s.png");
 	Image fahrrad_s_r = new Image("ssur/icons/fahrrad_s_r.png");
 	
+	//String Untergrund wird initialisiert
+	private String untergrund = "Asphalt";
 	
     /**
      * Initialisierungsmethode
-     * In dieser Methode werden die passenden Items den ChoiceBoxen zugeordnet, Tooltipps werden erstellt und die ersten Parameter werden
+     * In dieser Methode werden die passenden Items den ChoiceBoxen zugeordnet, Tooltipps werden erstellt und die ersten Parameter werden.
      * in die TextFielder und ChoiceBoxen geladen.
      */
     @FXML
@@ -96,23 +102,29 @@ public class HomeController
     	//ChoiceBoxen in der Parameterleiste werden gefuellt
     	cb_fahrzeugtyp.setItems(fahrzeugtypen);
     	cb_fahrtrichtung.setItems(fahrtrichtungen);
+    	cb_untergrund.setItems(untergrunde);
     	
     	//Tooltipps werden erstellt
     	cb_fahrzeugtyp.setTooltip(new Tooltip("W‰hlen Sie den Typ des aktuellen Fahrzeuges."));
     	cb_fahrtrichtung.setTooltip(new Tooltip("W‰hlen Sie die Fahrtrichtung des aktuellen Fahrzeuges."));
+    	cb_untergrund.setTooltip(new Tooltip("W‰hlen Sie den Untergrund, auf dem die Fahrzeuge fahren."));
     	
     	//Textlabel fuer die Berechnungen werden versteckt
     	lb_aufprallort.setVisible(false);
     	lb_aufprallzeitpunkt.setVisible(false);
+    	lb_anhalteweg.setVisible(false);
     	
     	//Parameter es ersten Fahrzeuges laden (standardmaessig)
     	ladeParameter(f1);
+    	
+    	//Untergrund wird geladen (standardmaessig)
+    	cb_untergrund.setValue("Asphalt");
     }
     
     
     /**
      * Zur Einstellungs-Scene wechseln
-     * Methode fuer den Wechsel zur Scene Einstellungen
+     * Methode fuer den Wechsel zur Scene Einstellungen.
      * @throws IOException 
      */
     @FXML
@@ -143,7 +155,7 @@ public class HomeController
     
     /**
      * Parameter speichern
-     * Methode fuer das Speichern der eingegebenen Parameter. Je nachdem welches Fahrzeug ausgewaehlt wurde werden die Eingaben
+     * Methode fuer das Speichern der eingegebenen Parameter. Je nachdem welches Fahrzeug ausgewaehlt wurde werden die Eingaben.
      * auf dieses gespeichert. Ist kein Fahrzeug ausgewaehlt, wird eine Fehlermeldung ausgegeben.
      * @param event
      * @throws IOException
@@ -163,6 +175,7 @@ public class HomeController
     		f1.setStartpunkt(Float.parseFloat(tf_startpunkt.getText()));
     		if (f1.getImpuls() == 0.0f) {f1.setImpuls(berechneImpuls());} //Falls der Impuls nicht eingetragen wurde, wird er berechnet
     		if (f1.getEkin() == 0.0f) {f1.setEkin(berechneEkin());} //Fals die Ekin nicht eingetragen wurde, wird sie berechnet
+    		untergrund = cb_untergrund.getValue();
     		
     		ladeParameter(f1); //Parameter werden neu in die Felder geladen, da Berechnungen stattgefunden haben koennten
     		
@@ -207,6 +220,7 @@ public class HomeController
     		f2.setStartpunkt(Float.parseFloat(tf_startpunkt.getText()));
     		if (f2.getImpuls() == 0.0f) {f2.setImpuls(berechneImpuls());} //Falls der Impuls nicht eingetragen wurde, wird er berechnet
     		if (f2.getEkin() == 0.0f) {f2.setEkin(berechneEkin());} //Fals die Ekin nicht eingetragen wurde, wird sie berechnet
+    		untergrund = cb_untergrund.getValue();
     		
     		ladeParameter(f2); //Parameter werden neu in die Felder geladen, da Berechnungen stattgefunden haben koennten
     		
@@ -217,22 +231,18 @@ public class HomeController
     			if (f2.getFahrtrichtung() == "rechts") {iv_fahrzeug2.setImage(auto_s);}
     			else {iv_fahrzeug2.setImage(auto_s_r);}
     			break;
-    			
     		case "LKW":
     			if (f2.getFahrtrichtung() == "rechts") {iv_fahrzeug2.setImage(lkw_s);}
     			else {iv_fahrzeug2.setImage(lkw_s_r);}
     			break;
-    			
     		case "E-Scooter":
     			if (f2.getFahrtrichtung() == "rechts") {iv_fahrzeug2.setImage(escooter_s);}
     			else {iv_fahrzeug2.setImage(escooter_s_r);}
     			break;
-    			
     		case "Fahrrad":
     			if (f2.getFahrtrichtung() == "rechts") {iv_fahrzeug2.setImage(fahrrad_s);}
     			else {iv_fahrzeug2.setImage(fahrrad_s_r);}
     			break;
-    			
     		default:
     			System.out.println("Fehler beim Wechseln des Fahrzeugicons!");
     			break;
@@ -251,7 +261,7 @@ public class HomeController
     
     
     /**
-     * FXML Event-Methode um die Parameter des jeweiligen Fahrzeuges in die TextFelder bzw. in die ChoiceBoxen zu laden
+     * FXML Event-Methode um die Parameter des jeweiligen Fahrzeuges in die TextFelder bzw. in die ChoiceBoxen zu laden.
      * @param event
      */
     @FXML
@@ -295,6 +305,7 @@ public class HomeController
     		//Label fuer die letzte Berechnung werden ausgeblendet
     		lb_aufprallort.setVisible(false);
     		lb_aufprallzeitpunkt.setVisible(false);
+    		lb_anhalteweg.setVisible(false);
     	}
         
     	//Alle Parameter der Fahrzeuge werden zurueckgesetzt
@@ -314,6 +325,9 @@ public class HomeController
     	f2.setImpuls(0);
     	f2.setStartpunkt(0);
     	
+    	cb_untergrund.setValue("Asphalt");
+    	untergrund = "Asphalt";
+    	
     	//Parameter werden neugeladen
     	ladeParameter(f1);
     }
@@ -322,6 +336,7 @@ public class HomeController
     @FXML
     public void starteBerechnung(ActionEvent event)
     {
+    	System.out.println("Neue Berechnung gestartet. \n");
     	float aufprallort = berechneAufprallort(f1.getGeschwindigkeit(), f2.getGeschwindigkeit(), f1.getFahrtrichtung(), f2.getFahrtrichtung(), f1.getStartpunkt(), f2.getStartpunkt());
     	float aufprallzeitpunkt = berechneAufprallzeitpunkt(f1.getGeschwindigkeit(), f2.getGeschwindigkeit(), f1.getFahrtrichtung(), f2.getFahrtrichtung(), f1.getStartpunkt(), f2.getStartpunkt());
     	System.out.println("Aufprallort: " + rundeFloat(aufprallort) + "\n" + "Aufprallzeitpunkt: " + rundeFloat(aufprallzeitpunkt));
@@ -348,9 +363,17 @@ public class HomeController
         	lb_aufprallzeitpunkt.setVisible(true);
     		fadeInaufprallzeitpunkt.playFromStart();
     		
-    		starteAnimationFirst(); //Animation bis zum Stoss wird gestartet
+    		//Unnoetige Einblendung des Anhalteweges
+    		FadeTransition fadeInanhalteweg = new FadeTransition(Duration.millis(1000));
+    		fadeInanhalteweg.setNode(lb_anhalteweg);
+    	    fadeInanhalteweg.setFromValue(0.0);
+    	    fadeInanhalteweg.setToValue(1.0);
+    	    fadeInanhalteweg.setCycleCount(1);
+    	    fadeInanhalteweg.setAutoReverse(false);
+        	lb_anhalteweg.setVisible(true);
+        	fadeInanhalteweg.playFromStart();
     		
-    		//Berechnungen werden in die Label geschrieben
+    		//Erste Berechnungen werden in die Label geschrieben
     		lb_aufprallort.setText("Aufprallort: " + rundeFloat(aufprallort) + "m");
         	lb_aufprallzeitpunkt.setText("Aufprallzeitpunkt: " + rundeFloat(aufprallzeitpunkt) + "s");
         	
@@ -358,8 +381,19 @@ public class HomeController
         	tbtn_fahrzeug1.setSelected(false);
         	tbtn_fahrzeug2.setSelected(false);
         	
+        	//vektorielle Geschwindigkeit nach dem Stoss wird berechnet
         	float nachstossgeschwindgkeit = (f1.getImpuls() + f2.getImpuls()) / (f1.getGewicht() + f2.getGewicht());
-        	System.out.println("Geschwindigkeit nach dem Stoﬂ: " + nachstossgeschwindgkeit);
+        	System.out.println("Geschwindigkeit nach dem Stoﬂ: " + rundeFloat(nachstossgeschwindgkeit) + "m/s");
+        	
+        	//Anhalteweg nach dem Stoss wird berechnet
+        	float gesamtgewicht = rundeFloat(f1.getGewicht() + f2.getGewicht());
+        	float nachstossstrecke = (nachstossgeschwindgkeit * nachstossgeschwindgkeit) / (2 * ((getCr() * gesamtgewicht * 9.81f) / gesamtgewicht));
+        	System.out.println("Zur¸ckgelegte Strecke nach dem Stoﬂ: " + rundeFloat(nachstossstrecke) + "m");
+        	
+        	//Berechnung wird in das Label geschrieben
+        	lb_anhalteweg.setText("Anhalteweg: " + rundeFloat(nachstossstrecke) + "m");
+        	
+    		starteAnimation(nachstossgeschwindgkeit); //Animation fuer beide Fahrzeuge wird gestartet
     	}
     	else
     	{
@@ -375,7 +409,7 @@ public class HomeController
     
     
     /**
-     * Parameter des jeweiligen Fahrzeuges werden in die TextFelder bzw. in die ChoiceBoxen geladen
+     * Parameter des jeweiligen Fahrzeuges werden in die TextFelder bzw. in die ChoiceBoxen geladen.
      * @param fahrzeug
      */
     public void ladeParameter(Fahrzeug fahrzeug)
@@ -391,18 +425,36 @@ public class HomeController
     
     
     /**
-     * Animation starten
-     * Methode fuer die Animation der beiden Fahrzeuge
+     * Animation fuer die Bewegung beider Fahrzeuge.
+     * Beide Fahrzeuge fahren aufeinander zu und bewegen sich nach dem Stoﬂ je nach der nachstossgeschwindigkeit unterschiedlich weiter.
+     * Ist diese postiv, bewegen sie sich nach rechts, ist sie negativ, bewegen sie sich nach links. Betraegt sie null m/s, so bewegen
+     * sich beide Fahrzeuge nicht weiter.
+     * @param nachstossgeschwindigkeit
      */
-    public void starteAnimationFirst()
+    public void starteAnimation(float nachstossgeschwindigkeit)
     {
     	Path path1 = new Path();
+    	Path path2 = new Path();
+    	
     	path1.getElements().add(new MoveTo(76, 75));  //Startpunkt der Animation	
     	path1.getElements().add(new LineTo(275, 75));
-    	
-    	Path path2 = new Path();
+
     	path2.getElements().add(new MoveTo(76, 75));  //Startpunkt der Animation	
     	path2.getElements().add(new LineTo(-109, 75));
+    	
+    	if (nachstossgeschwindigkeit < 0)
+     	{
+    		//Fahrzeuge bewegen sich gemeinsam nach links
+        	path1.getElements().add(new LineTo(175, 75));
+        	path2.getElements().add(new LineTo(-209, 75));
+     	}
+   
+     	else if (nachstossgeschwindigkeit > 0)
+     	{	
+     		//Fahrzeuge bewegen sich gemeinsam nach rechts
+        	path1.getElements().add(new LineTo(375, 75));	
+        	path2.getElements().add(new LineTo(-9, 75));
+     	}
     	
     	PathTransition ptr1 = new PathTransition();
     	ptr1.setDuration(Duration.seconds(2));
@@ -417,12 +469,9 @@ public class HomeController
         ptr2.setAutoReverse(false);
         
         ptr1.play();
-        ptr2.play();
-        
-        
-        
+        ptr2.play();        
     }
-    
+ 
     
     /**
      * Float runden
@@ -443,8 +492,8 @@ public class HomeController
      */
     public float berechneImpuls()
     {
-    	if (cb_fahrtrichtung.getValue() == "links") {return (Float.parseFloat(tf_geschwindigkeit.getText()) * Float.parseFloat(tf_gewicht.getText())) * -1;} //Falls sich das Fahrzeug nach links bewegt, ist die Geschwundigkeit negativ
-    	return Float.parseFloat(tf_geschwindigkeit.getText()) * Float.parseFloat(tf_gewicht.getText());
+    	if (cb_fahrtrichtung.getValue() == "links") {return rundeFloat(((Float.parseFloat(tf_geschwindigkeit.getText()) / 3.6f) * Float.parseFloat(tf_gewicht.getText()))) * -1;} //Falls sich das Fahrzeug nach links bewegt, ist die Geschwundigkeit negativ
+    	return rundeFloat((Float.parseFloat(tf_geschwindigkeit.getText()) / 3.6f) * Float.parseFloat(tf_gewicht.getText()));
     }
     
     
@@ -455,10 +504,34 @@ public class HomeController
      */
     public float berechneEkin()
     {
-    	return (Float.parseFloat(tf_gewicht.getText()) / 2.0f) * (Float.parseFloat(tf_geschwindigkeit.getText()) * Float.parseFloat(tf_geschwindigkeit.getText()));
+    	return rundeFloat((Float.parseFloat(tf_gewicht.getText()) / 2.0f) * (Float.parseFloat(tf_geschwindigkeit.getText()) * Float.parseFloat(tf_geschwindigkeit.getText())));
     }
     
-     
+    
+    /**
+     * Methode um passenden Rollreibungskoeffizenten zu erhalten
+     * Je nach dem welcher Untergrund ausgewaehlt wurde, wird der dazugehoerige Rollreibungskoeffizent zurueckgegeben.
+     * @return
+     */
+    public float getCr()
+    {
+    	switch (untergrund) 
+    	{
+		case "Asphalt":
+			return 0.013f;
+		case "Beton":
+			return 0.015f;
+		case "Schotter":
+			return 0.02f;
+		case "Kopfsteinpflaster":
+			return 0.02f;
+		default:
+			System.out.println("Fehler bei der Auswahl des Untergrundes!");
+			return -1;
+		}
+    }
+    
+    
     /**
      * Methode um Inhalt fuer eine ChoiceBox setzen zu koennen
      * @param choiceBox
