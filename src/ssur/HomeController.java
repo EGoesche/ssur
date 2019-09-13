@@ -1,6 +1,8 @@
 package ssur;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 
 import javafx.animation.FadeTransition;
 import javafx.animation.PathTransition;
@@ -18,12 +20,15 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
 import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
@@ -61,10 +66,12 @@ public class HomeController
     @FXML private Button btn_zuruecksetzen;
     
     //Items im Pane
+    @FXML private Label lb_modus;
     @FXML private ToggleButton tbtn_fahrzeug1;
     @FXML private ToggleButton tbtn_fahrzeug2;
     @FXML private ImageView iv_fahrzeug1;
     @FXML private ImageView iv_fahrzeug2;
+    @FXML private Label lb_rekonstruktion;
     @FXML private Label lb_aufprallort;
     @FXML private Label lb_aufprallzeitpunkt;
     @FXML private Label lb_anhalteweg;
@@ -91,6 +98,10 @@ public class HomeController
 	//String Untergrund wird initialisiert
 	private String untergrund = "Asphalt";
 	
+	//String Modus wird initialisiert
+	private String modus = "Simulation";
+	
+	
     /**
      * Initialisierungsmethode
      * In dieser Methode werden die passenden Items den ChoiceBoxen zugeordnet, Tooltipps werden erstellt und die ersten Parameter werden.
@@ -108,11 +119,13 @@ public class HomeController
     	cb_fahrzeugtyp.setTooltip(new Tooltip("W‰hlen Sie den Typ des aktuellen Fahrzeuges."));
     	cb_fahrtrichtung.setTooltip(new Tooltip("W‰hlen Sie die Fahrtrichtung des aktuellen Fahrzeuges."));
     	cb_untergrund.setTooltip(new Tooltip("W‰hlen Sie den Untergrund, auf dem die Fahrzeuge fahren."));
+    	tf_startpunkt.setTooltip(new Tooltip("Geben Sie an, an welchem Punkt das aktuelle Fahrzeug startet."));
     	
     	//Textlabel fuer die Berechnungen werden versteckt
     	lb_aufprallort.setVisible(false);
     	lb_aufprallzeitpunkt.setVisible(false);
     	lb_anhalteweg.setVisible(false);
+    	lb_rekonstruktion.setVisible(false);
     	
     	//Parameter es ersten Fahrzeuges laden (standardmaessig)
     	ladeParameter(f1);
@@ -137,6 +150,7 @@ public class HomeController
     	
     	window.setScene(settings);
     	window.setResizable(false);
+    	//window.getIcons().add(new Image(this.getClass().getResource("login.png").toString()));
     	window.show();
     }
     
@@ -149,9 +163,142 @@ public class HomeController
     @FXML
     public void goToRekonstruktion(ActionEvent event) throws IOException
     {
+    	//Fahrzeuge werden in Ausgangsposition gebracht
+		Path path1 = new Path();
+		path1.getElements().add(new MoveTo(76, 75));  //Startpunkt der Animation	
+		path1.getElements().add(new LineTo(275, 75));
+	
+		Path path2 = new Path();
+		path2.getElements().add(new MoveTo(76, 75));  //Startpunkt der Animation	
+		path2.getElements().add(new LineTo(-109, 75));
+	
+		PathTransition ptr1 = new PathTransition();
+		ptr1.setDuration(Duration.seconds(0.5));
+		ptr1.setPath(path1);
+		ptr1.setNode(iv_fahrzeug1);
+		ptr1.setAutoReverse(false);
+		
+		PathTransition ptr2 = new PathTransition();
+		ptr2.setDuration(Duration.seconds(0.5));
+		ptr2.setPath(path2);
+		ptr2.setNode(iv_fahrzeug2);
+		ptr2.setAutoReverse(false);
+		
+		ptr1.play();
+		ptr2.play();
+		
+		//Label fuer aktuellem Modus wird gewechselt
+		lb_modus.setText("Rekonstruktionsmodus");
+		lb_startpunkt.setText("Anhalteweg (in m)");
+		
+		//Tooltipps werden erstellt
+    	tf_startpunkt.setTooltip(new Tooltip("Der Anhalteweg ist f¸r beide Fahrzeuge gleich groﬂ."));
     	
+    	//Alle Parameter der Fahrzeuge werden zurueckgesetzt
+    	f1.setEkin(0);
+    	f1.setFahrtrichtung("rechts");
+    	f1.setFahrzeugtyp("PKW");
+    	f1.setGeschwindigkeit(0);
+    	f1.setGewicht(0);
+    	f1.setImpuls(0);
+    	f1.setStartpunkt(0);
+    	
+    	f2.setEkin(0);
+    	f2.setFahrtrichtung("links");
+    	f2.setFahrzeugtyp("PKW");
+    	f2.setGeschwindigkeit(0);
+    	f2.setGewicht(0);
+    	f2.setImpuls(0);
+    	f2.setStartpunkt(0);
+    	
+    	cb_untergrund.setValue("Asphalt");
+    	untergrund = "Asphalt";
+    	
+		//Label fuer die letzte Berechnung werden ausgeblendet
+		lb_aufprallort.setVisible(false);
+		lb_aufprallzeitpunkt.setVisible(false);
+		lb_anhalteweg.setVisible(false);
+    	
+    	//Parameter werden neugeladen
+    	tbtn_fahrzeug1.setSelected(true);
+    	ladeParameter(f1);
+    	
+    	//Modus String wird angepasst
+    	modus = "Rekonstruktion";
     }
     
+    
+    /**
+     * Wechsel in den Rekonstruktionsmodus
+     * @param event
+     * @throws IOException
+     */
+    @FXML
+    public void goToSimulation(ActionEvent event) throws IOException
+    {
+    	//Fahrzeuge werden in Ausgangsposition gebracht
+		Path path1 = new Path();
+		path1.getElements().add(new MoveTo(275, 75));  //Startpunkt der Animation	
+		path1.getElements().add(new LineTo(76, 75));
+	
+		Path path2 = new Path();
+		path2.getElements().add(new MoveTo(-109, 75));  //Startpunkt der Animation	
+		path2.getElements().add(new LineTo(76, 75));
+	
+		PathTransition ptr1 = new PathTransition();
+		ptr1.setDuration(Duration.seconds(0.5));
+		ptr1.setPath(path1);
+		ptr1.setNode(iv_fahrzeug1);
+		ptr1.setAutoReverse(false);
+		
+		PathTransition ptr2 = new PathTransition();
+		ptr2.setDuration(Duration.seconds(0.5));
+		ptr2.setPath(path2);
+		ptr2.setNode(iv_fahrzeug2);
+		ptr2.setAutoReverse(false);
+		
+		ptr1.play();
+		ptr2.play();
+		
+		//Label fuer aktuellem Modus wird gewechselt
+		lb_modus.setText("Simulationsmodus");
+		lb_startpunkt.setText("Startpunkt (in m)");
+		
+		//Tooltipps werden erstellt
+    	tf_startpunkt.setTooltip(new Tooltip("Geben Sie an, an welchem Punkt das aktuelle Fahrzeug startet."));
+    	
+    	//Alle Parameter der Fahrzeuge werden zurueckgesetzt
+    	f1.setEkin(0);
+    	f1.setFahrtrichtung("rechts");
+    	f1.setFahrzeugtyp("PKW");
+    	f1.setGeschwindigkeit(0);
+    	f1.setGewicht(0);
+    	f1.setImpuls(0);
+    	f1.setStartpunkt(0);
+    	
+    	f2.setEkin(0);
+    	f2.setFahrtrichtung("links");
+    	f2.setFahrzeugtyp("PKW");
+    	f2.setGeschwindigkeit(0);
+    	f2.setGewicht(0);
+    	f2.setImpuls(0);
+    	f2.setStartpunkt(0);
+    	
+    	cb_untergrund.setValue("Asphalt");
+    	untergrund = "Asphalt";
+    	
+		//Label fuer die letzte Berechnung werden ausgeblendet
+		lb_aufprallort.setVisible(false);
+		lb_aufprallzeitpunkt.setVisible(false);
+		lb_anhalteweg.setVisible(false);
+    	
+    	//Parameter werden neugeladen
+    	ladeParameter(f1);
+    	tbtn_fahrzeug1.setSelected(true);
+    	
+    	//Modus String wird angepasst
+    	modus = "Simulation";
+    }
     
     /**
      * Parameter speichern
@@ -163,99 +310,106 @@ public class HomeController
     @FXML
     public void speichereParameter(ActionEvent event) throws IOException
     {
-    	if (tbtn_fahrzeug1.isSelected())
+    	try
     	{
-    		//Lade alle Parameter von Fahrzeug 1 in die Kontrollelemente
-    		f1.setGewicht(Float.parseFloat(tf_gewicht.getText()));
-    		f1.setGeschwindigkeit(Float.parseFloat(tf_geschwindigkeit.getText()));
-    		f1.setImpuls(Float.parseFloat(tf_impuls.getText()));
-    		f1.setEkin(Float.parseFloat(tf_energie.getText()));
-    		f1.setFahrzeugtyp(cb_fahrzeugtyp.getValue());
-    		f1.setFahrtrichtung(cb_fahrtrichtung.getValue());
-    		f1.setStartpunkt(Float.parseFloat(tf_startpunkt.getText()));
-    		if (f1.getImpuls() == 0.0f) {f1.setImpuls(berechneImpuls());} //Falls der Impuls nicht eingetragen wurde, wird er berechnet
-    		if (f1.getEkin() == 0.0f) {f1.setEkin(berechneEkin());} //Fals die Ekin nicht eingetragen wurde, wird sie berechnet
-    		untergrund = cb_untergrund.getValue();
-    		
-    		ladeParameter(f1); //Parameter werden neu in die Felder geladen, da Berechnungen stattgefunden haben koennten
-    		
-    		//Setze das Icon fuer das Fahrzeug
-    		switch(f1.getFahrzeugtyp())
+    		if (tbtn_fahrzeug1.isSelected())
     		{
-    		case "PKW":
-    			if (f1.getFahrtrichtung() == "rechts") {iv_fahrzeug1.setImage(auto_s);}
-    			else {iv_fahrzeug1.setImage(auto_s_r);}
-    			break;
+    			//Lade alle Parameter von Fahrzeug 1 in die Kontrollelemente
+    			f1.setGewicht(Float.parseFloat(tf_gewicht.getText()));
+    			f1.setGeschwindigkeit(Float.parseFloat(tf_geschwindigkeit.getText()));
+    			f1.setImpuls(Float.parseFloat(tf_impuls.getText()));
+    			f1.setEkin(Float.parseFloat(tf_energie.getText()));
+    			f1.setFahrzeugtyp(cb_fahrzeugtyp.getValue());
+    			f1.setFahrtrichtung(cb_fahrtrichtung.getValue());
+    			if (modus == "Simulation") {f1.setStartpunkt(Float.parseFloat(tf_startpunkt.getText()));} //Im Rekonstruktionsmodus wird in diesem TextField der Anhalteweg eingetragen
+    			if (f1.getImpuls() == 0.0f) {f1.setImpuls(berechneImpuls());} //Falls der Impuls nicht eingetragen wurde, wird er berechnet
+    			if (f1.getEkin() == 0.0f) {f1.setEkin(berechneEkin());} //Fals die Ekin nicht eingetragen wurde, wird sie berechnet
+    			untergrund = cb_untergrund.getValue();
     			
-    		case "LKW":
-    			if (f1.getFahrtrichtung() == "rechts") {iv_fahrzeug1.setImage(lkw_s);}
-    			else {iv_fahrzeug1.setImage(lkw_s_r);}
-    			break;
+    			ladeParameter(f1); //Parameter werden neu in die Felder geladen, da Berechnungen stattgefunden haben koennten
     			
-    		case "E-Scooter":
-    			if (f1.getFahrtrichtung() == "rechts") {iv_fahrzeug1.setImage(escooter_s);}
-    			else {iv_fahrzeug1.setImage(escooter_s_r);}
-    			break;
+    			//Setze das Icon fuer das Fahrzeug
+    			switch(f1.getFahrzeugtyp())
+    			{
+    			case "PKW":
+    				if (f1.getFahrtrichtung() == "rechts") {iv_fahrzeug1.setImage(auto_s);}
+    				else {iv_fahrzeug1.setImage(auto_s_r);}
+    				break;
     			
-    		case "Fahrrad":
-    			if (f1.getFahrtrichtung() == "rechts") {iv_fahrzeug1.setImage(fahrrad_s);}
-    			else {iv_fahrzeug1.setImage(fahrrad_s_r);}
-    			break;
+    			case "LKW":
+    				if (f1.getFahrtrichtung() == "rechts") {iv_fahrzeug1.setImage(lkw_s);}
+    				else {iv_fahrzeug1.setImage(lkw_s_r);}
+    				break;
+    				
+    			case "E-Scooter":
+    				if (f1.getFahrtrichtung() == "rechts") {iv_fahrzeug1.setImage(escooter_s);}
+    				else {iv_fahrzeug1.setImage(escooter_s_r);}
+    				break;
     			
-    		default:
-    			System.out.println("Fehler beim Wechseln des Fahrzeugicons!");
-    			break;
+    			case "Fahrrad":
+    				if (f1.getFahrtrichtung() == "rechts") {iv_fahrzeug1.setImage(fahrrad_s);}
+    				else {iv_fahrzeug1.setImage(fahrrad_s_r);}
+    				break;
+    			
+    			default:
+    				System.out.println("Fehler beim Wechseln des Fahrzeugicons!");
+    				break;
+    			}
     		}
-    	}
     	
-    	else if (tbtn_fahrzeug2.isSelected())
-    	{
-    		//Lade alle Parameter von Fahrzeug 2 in die Kontrollelemente
-    		f2.setGewicht(Float.parseFloat(tf_gewicht.getText()));
-    		f2.setGeschwindigkeit(Float.parseFloat(tf_geschwindigkeit.getText()));
-    		f2.setImpuls(Float.parseFloat(tf_impuls.getText()));
-    		f2.setEkin(Float.parseFloat(tf_energie.getText()));
-    		f2.setFahrzeugtyp(cb_fahrzeugtyp.getValue());
-    		f2.setFahrtrichtung(cb_fahrtrichtung.getValue());
-    		f2.setStartpunkt(Float.parseFloat(tf_startpunkt.getText()));
-    		if (f2.getImpuls() == 0.0f) {f2.setImpuls(berechneImpuls());} //Falls der Impuls nicht eingetragen wurde, wird er berechnet
-    		if (f2.getEkin() == 0.0f) {f2.setEkin(berechneEkin());} //Fals die Ekin nicht eingetragen wurde, wird sie berechnet
-    		untergrund = cb_untergrund.getValue();
-    		
-    		ladeParameter(f2); //Parameter werden neu in die Felder geladen, da Berechnungen stattgefunden haben koennten
-    		
-    		//Setze das Icon fuer das Fahrzeug
-    		switch(f2.getFahrzeugtyp())
+    		else if (tbtn_fahrzeug2.isSelected())
     		{
-    		case "PKW":
-    			if (f2.getFahrtrichtung() == "rechts") {iv_fahrzeug2.setImage(auto_s);}
-    			else {iv_fahrzeug2.setImage(auto_s_r);}
-    			break;
-    		case "LKW":
-    			if (f2.getFahrtrichtung() == "rechts") {iv_fahrzeug2.setImage(lkw_s);}
-    			else {iv_fahrzeug2.setImage(lkw_s_r);}
-    			break;
-    		case "E-Scooter":
-    			if (f2.getFahrtrichtung() == "rechts") {iv_fahrzeug2.setImage(escooter_s);}
-    			else {iv_fahrzeug2.setImage(escooter_s_r);}
-    			break;
-    		case "Fahrrad":
-    			if (f2.getFahrtrichtung() == "rechts") {iv_fahrzeug2.setImage(fahrrad_s);}
-    			else {iv_fahrzeug2.setImage(fahrrad_s_r);}
-    			break;
-    		default:
-    			System.out.println("Fehler beim Wechseln des Fahrzeugicons!");
-    			break;
+    			//Lade alle Parameter von Fahrzeug 2 in die Kontrollelemente
+    			f2.setGewicht(Float.parseFloat(tf_gewicht.getText()));
+    			f2.setGeschwindigkeit(Float.parseFloat(tf_geschwindigkeit.getText()));
+    			f2.setImpuls(Float.parseFloat(tf_impuls.getText()));
+    			f2.setEkin(Float.parseFloat(tf_energie.getText()));
+    			f2.setFahrzeugtyp(cb_fahrzeugtyp.getValue());
+    			f2.setFahrtrichtung(cb_fahrtrichtung.getValue());
+    			if (modus == "Simulation") {f2.setStartpunkt(Float.parseFloat(tf_startpunkt.getText()));} //Im Rekonstruktionsmodus wird in diesem TextField der Anhalteweg eingetragen
+    			if (f2.getImpuls() == 0.0f) {f2.setImpuls(berechneImpuls());} //Falls der Impuls nicht eingetragen wurde, wird er berechnet
+    			if (f2.getEkin() == 0.0f) {f2.setEkin(berechneEkin());} //Fals die Ekin nicht eingetragen wurde, wird sie berechnet
+    			untergrund = cb_untergrund.getValue();
+    			
+    			ladeParameter(f2); //Parameter werden neu in die Felder geladen, da Berechnungen stattgefunden haben koennten
+    			
+    			//Setze das Icon fuer das Fahrzeug
+    			switch(f2.getFahrzeugtyp())
+    			{
+    			case "PKW":
+    				if (f2.getFahrtrichtung() == "rechts") {iv_fahrzeug2.setImage(auto_s);}
+    				else {iv_fahrzeug2.setImage(auto_s_r);}
+    				break;
+    			case "LKW":
+    				if (f2.getFahrtrichtung() == "rechts") {iv_fahrzeug2.setImage(lkw_s);}
+    				else {iv_fahrzeug2.setImage(lkw_s_r);}
+    				break;
+    			case "E-Scooter":
+    				if (f2.getFahrtrichtung() == "rechts") {iv_fahrzeug2.setImage(escooter_s);}
+    				else {iv_fahrzeug2.setImage(escooter_s_r);}
+    				break;
+    			case "Fahrrad":
+    				if (f2.getFahrtrichtung() == "rechts") {iv_fahrzeug2.setImage(fahrrad_s);}
+    				else {iv_fahrzeug2.setImage(fahrrad_s_r);}
+    				break;
+    			default:
+    				System.out.println("Fehler beim Wechseln des Fahrzeugicons!");
+    				break;
+    			}
+    		}
+    		else
+    		{
+    			//Falls kein Fahrzeug gewaehlt wurde wird ein Fehler ausgegeben
+    			Alert alert = new Alert(AlertType.ERROR);
+    			alert.setTitle("Fehlermeldung");
+    			alert.setHeaderText("Fehler beim Speichern");
+    			alert.setContentText("Bitte w‰hlen Sie zuerst ein Fahrzeug!");
+    			alert.showAndWait();
     		}
     	}
-    	else
+    	catch (Exception e)
     	{
-    		//Falls kein Fahrzeug gewaehlt wurde wird ein Fehler ausgegeben
-    		Alert alert = new Alert(AlertType.ERROR);
-    		alert.setTitle("Fehlermeldung");
-    		alert.setHeaderText("Fehler beim Speichern");
-    		alert.setContentText("Bitte w‰hlen Sie zuerst ein Fahrzeug!");
-    		alert.showAndWait();
+    		createError(e);
     	}
     }
     
@@ -306,6 +460,7 @@ public class HomeController
     		lb_aufprallort.setVisible(false);
     		lb_aufprallzeitpunkt.setVisible(false);
     		lb_anhalteweg.setVisible(false);
+    		lb_rekonstruktion.setVisible(false);
     	}
         
     	//Alle Parameter der Fahrzeuge werden zurueckgesetzt
@@ -328,83 +483,126 @@ public class HomeController
     	cb_untergrund.setValue("Asphalt");
     	untergrund = "Asphalt";
     	
-    	//Parameter werden neugeladen
-    	ladeParameter(f1);
+    	tf_startpunkt.setText("0.0"); //TextField muss manuell auf 0 gesetzt werden, da es sonst in ladeParameter zu Komplikationen kommt
+    	ladeParameter(f1); //Parameter werden neugeladen
+    	tbtn_fahrzeug1.setSelected(true); //Nach Berechnung werden Fahrzeuge nicht mehr selektiert, weshalb neu selektiert werden muss
     }
     
     
     @FXML
     public void starteBerechnung(ActionEvent event)
     {
-    	System.out.println("Neue Berechnung gestartet. \n");
-    	float aufprallort = berechneAufprallort(f1.getGeschwindigkeit(), f2.getGeschwindigkeit(), f1.getFahrtrichtung(), f2.getFahrtrichtung(), f1.getStartpunkt(), f2.getStartpunkt());
-    	float aufprallzeitpunkt = berechneAufprallzeitpunkt(f1.getGeschwindigkeit(), f2.getGeschwindigkeit(), f1.getFahrtrichtung(), f2.getFahrtrichtung(), f1.getStartpunkt(), f2.getStartpunkt());
-    	System.out.println("Aufprallort: " + rundeFloat(aufprallort) + "\n" + "Aufprallzeitpunkt: " + rundeFloat(aufprallzeitpunkt));
-    	
-    	if (aufprallort != -1.0 && aufprallzeitpunkt != -1.0) //Abfrage, ob Berechnung erfolgreich war
+    	try
     	{
-    		//Unnoetige Einblendung des Aufprallortes
-    		FadeTransition fadeInaufprallort = new FadeTransition(Duration.millis(1000));
-    		fadeInaufprallort.setNode(lb_aufprallort);
-    	    fadeInaufprallort.setFromValue(0.0);
-    	    fadeInaufprallort.setToValue(1.0);
-    	    fadeInaufprallort.setCycleCount(1);
-    	    fadeInaufprallort.setAutoReverse(false);
-    		lb_aufprallort.setVisible(true);
-    		fadeInaufprallort.playFromStart();
+    		System.out.println("Neue Berechnung gestartet. \n");
     		
-    		//Unnoetige Einblendung des Aufprallzeitpunktes
-    		FadeTransition fadeInaufprallzeitpunkt = new FadeTransition(Duration.millis(1000));
-    		fadeInaufprallzeitpunkt.setNode(lb_aufprallzeitpunkt);
-    	    fadeInaufprallzeitpunkt.setFromValue(0.0);
-    	    fadeInaufprallzeitpunkt.setToValue(1.0);
-    	    fadeInaufprallzeitpunkt.setCycleCount(1);
-    	    fadeInaufprallzeitpunkt.setAutoReverse(false);
-        	lb_aufprallzeitpunkt.setVisible(true);
-    		fadeInaufprallzeitpunkt.playFromStart();
+    		float aufprallort = berechneAufprallort(f1.getGeschwindigkeit(), f2.getGeschwindigkeit(), f1.getFahrtrichtung(), f2.getFahrtrichtung(), f1.getStartpunkt(), f2.getStartpunkt());
+    		float aufprallzeitpunkt = berechneAufprallzeitpunkt(f1.getGeschwindigkeit(), f2.getGeschwindigkeit(), f1.getFahrtrichtung(), f2.getFahrtrichtung(), f1.getStartpunkt(), f2.getStartpunkt());
+    		System.out.println("Aufprallort: " + rundeFloat(aufprallort) + "\n" + "Aufprallzeitpunkt: " + rundeFloat(aufprallzeitpunkt));
     		
-    		//Unnoetige Einblendung des Anhalteweges
-    		FadeTransition fadeInanhalteweg = new FadeTransition(Duration.millis(1000));
-    		fadeInanhalteweg.setNode(lb_anhalteweg);
-    	    fadeInanhalteweg.setFromValue(0.0);
-    	    fadeInanhalteweg.setToValue(1.0);
-    	    fadeInanhalteweg.setCycleCount(1);
-    	    fadeInanhalteweg.setAutoReverse(false);
-        	lb_anhalteweg.setVisible(true);
-        	fadeInanhalteweg.playFromStart();
-    		
-    		//Erste Berechnungen werden in die Label geschrieben
-    		lb_aufprallort.setText("Aufprallort: " + rundeFloat(aufprallort) + "m");
-        	lb_aufprallzeitpunkt.setText("Aufprallzeitpunkt: " + rundeFloat(aufprallzeitpunkt) + "s");
-        	
-        	//Alle Fahrzeuge werden nicht mehr selektiert
-        	tbtn_fahrzeug1.setSelected(false);
-        	tbtn_fahrzeug2.setSelected(false);
-        	
-        	//vektorielle Geschwindigkeit nach dem Stoss wird berechnet
-        	float nachstossgeschwindgkeit = (f1.getImpuls() + f2.getImpuls()) / (f1.getGewicht() + f2.getGewicht());
-        	System.out.println("Geschwindigkeit nach dem Stoﬂ: " + rundeFloat(nachstossgeschwindgkeit) + "m/s");
-        	
-        	//Anhalteweg nach dem Stoss wird berechnet
-        	float gesamtgewicht = rundeFloat(f1.getGewicht() + f2.getGewicht());
-        	float nachstossstrecke = (nachstossgeschwindgkeit * nachstossgeschwindgkeit) / (2 * ((getCr() * gesamtgewicht * 9.81f) / gesamtgewicht));
-        	System.out.println("Zur¸ckgelegte Strecke nach dem Stoﬂ: " + rundeFloat(nachstossstrecke) + "m");
-        	
-        	//Berechnung wird in das Label geschrieben
-        	lb_anhalteweg.setText("Anhalteweg: " + rundeFloat(nachstossstrecke) + "m");
-        	
-    		starteAnimation(nachstossgeschwindgkeit); //Animation fuer beide Fahrzeuge wird gestartet
+    		if (aufprallort != -1.0 && aufprallzeitpunkt != -1.0) //Abfrage, ob es zu einem Zusammenstoss kommen kann
+    		{
+    			if (modus == "Simulation")
+    			{
+    				//Unnoetige Einblendung des Aufprallortes
+    				FadeTransition fadeInaufprallort = new FadeTransition(Duration.millis(1000));
+    				fadeInaufprallort.setNode(lb_aufprallort);
+    				fadeInaufprallort.setFromValue(0.0);
+    				fadeInaufprallort.setToValue(1.0);
+    				fadeInaufprallort.setCycleCount(1);
+    				fadeInaufprallort.setAutoReverse(false);
+    				lb_aufprallort.setVisible(true);
+    				fadeInaufprallort.playFromStart();
+    				
+    				//Unnoetige Einblendung des Aufprallzeitpunktes
+    				FadeTransition fadeInaufprallzeitpunkt = new FadeTransition(Duration.millis(1000));
+    				fadeInaufprallzeitpunkt.setNode(lb_aufprallzeitpunkt);
+    				fadeInaufprallzeitpunkt.setFromValue(0.0);
+    				fadeInaufprallzeitpunkt.setToValue(1.0);
+    				fadeInaufprallzeitpunkt.setCycleCount(1);
+    				fadeInaufprallzeitpunkt.setAutoReverse(false);
+    				lb_aufprallzeitpunkt.setVisible(true);
+    				fadeInaufprallzeitpunkt.playFromStart();
+    				
+    				//Unnoetige Einblendung des Anhalteweges
+    				FadeTransition fadeInanhalteweg = new FadeTransition(Duration.millis(1000));
+    				fadeInanhalteweg.setNode(lb_anhalteweg);
+    				fadeInanhalteweg.setFromValue(0.0);
+    				fadeInanhalteweg.setToValue(1.0);
+    				fadeInanhalteweg.setCycleCount(1);
+    				fadeInanhalteweg.setAutoReverse(false);
+    				lb_anhalteweg.setVisible(true);
+    				fadeInanhalteweg.playFromStart();
+    				
+    				//Erste Berechnungen werden in die Label geschrieben
+    				lb_aufprallort.setText("Aufprallort: " + rundeFloat(aufprallort) + "m");
+    				lb_aufprallzeitpunkt.setText("Aufprallzeitpunkt: " + rundeFloat(aufprallzeitpunkt) + "s");
+    			
+    				//Alle Fahrzeuge werden nicht mehr selektiert
+    				tbtn_fahrzeug1.setSelected(false);
+    				tbtn_fahrzeug2.setSelected(false);
+    				
+    				//vektorielle Geschwindigkeit nach dem Stoss wird berechnet
+    				float nachstossgeschwindgkeit = (f1.getImpuls() + f2.getImpuls()) / (f1.getGewicht() + f2.getGewicht());
+    				System.out.println("Geschwindigkeit nach dem Stoﬂ: " + rundeFloat(nachstossgeschwindgkeit) + "m/s");
+    				
+    				//Anhalteweg nach dem Stoss wird berechnet
+    				float gesamtgewicht = rundeFloat(f1.getGewicht() + f2.getGewicht());
+    				float nachstossstrecke = (nachstossgeschwindgkeit * nachstossgeschwindgkeit) / (2 * ((getCr() * gesamtgewicht * 9.81f) / gesamtgewicht));
+    				System.out.println("Anhalteweg: " + rundeFloat(nachstossstrecke) + "m");
+    				
+    				//Berechnung wird in das Label geschrieben
+    				lb_anhalteweg.setText("Anhalteweg: " + rundeFloat(nachstossstrecke) + "m");
+    				
+    				starteAnimation(nachstossgeschwindgkeit); //Animation fuer beide Fahrzeuge wird gestartet
+				}
+				else if (modus == "Rekonstruktion")
+				{
+					//vektorielle Geschwindigkeit nach dem Stoss wird berechnet
+					float nachstossgeschwindgkeit = (f1.getImpuls() + f2.getImpuls()) / (f1.getGewicht() + f2.getGewicht());
+					System.out.println("Geschwindigkeit nach dem Stoﬂ: " + rundeFloat(nachstossgeschwindgkeit) + "m/s");
+					
+					//Anhalteweg nach dem Stoss wird berechnet
+					float gesamtgewicht = rundeFloat(f1.getGewicht() + f2.getGewicht());
+					float nachstossstrecke = (nachstossgeschwindgkeit * nachstossgeschwindgkeit) / (2 * ((getCr() * gesamtgewicht * 9.81f) / gesamtgewicht));
+					System.out.println("Berechneter Anhalteweg: " + rundeFloat(nachstossstrecke) + "m");
+					
+					lb_rekonstruktion.setVisible(true);
+					
+					//Falls berechneter Anhalteweg mit angegebenen Anhalteweg uerbeinstimmt (mit 5% Toleranz)
+					if (nachstossstrecke < (Float.parseFloat(tf_startpunkt.getText()) + Float.parseFloat(tf_startpunkt.getText()) * 0.05f) && nachstossstrecke > (Float.parseFloat(tf_startpunkt.getText())) - Float.parseFloat(tf_startpunkt.getText()) * 0.05f)
+					{
+						lb_rekonstruktion.setText("Der Stoﬂ ist unter den eingegebenen Parametern mˆglich.");
+					}
+					else
+					{
+						lb_rekonstruktion.setText("Der Stoﬂ ist unter den eingegebenen Parametern nicht mˆglich.");
+					}
+				}
+				else
+				{
+	    			//Falls es einen Fehler bei der Moduswahl gibt
+	    			Alert alert = new Alert(AlertType.ERROR);
+	    			alert.setTitle("Fehlermeldung");
+	    			alert.setHeaderText("Fehler beim Moduswechsel");
+	    			alert.setContentText("Versuchen Sie es sp‰ter erneut!");
+	    			alert.showAndWait();
+				}
+			}
+			else
+    		{
+    			//Falls es zu keinem Zusammenstoss kommen kann
+    			Alert alert = new Alert(AlertType.ERROR);
+    			alert.setTitle("Fehlermeldung");
+    			alert.setHeaderText("Fehler bei der Berechnung");
+    			alert.setContentText("Es kann zu keinem Zusammenstoﬂ der Fahrzeuge kommen!");
+    			alert.showAndWait();
+    		}
     	}
-    	else
+    	catch (Exception e)
     	{
-    		//Falls Berechnung erfolglos war
-    		Alert alert = new Alert(AlertType.ERROR);
-    		alert.setTitle("Fehlermeldung");
-    		alert.setHeaderText("Fehler bei der Berechnung");
-    		alert.setContentText("Es kann zu keinem Zusammenstoﬂ der Fahrzeuge kommen!");
-    		alert.showAndWait();
+    		createError(e);
     	}
-    	
     }
     
     
@@ -420,7 +618,7 @@ public class HomeController
  	   setTextField(tf_impuls, Float.toString(fahrzeug.getImpuls()));
  	   setTextField(tf_energie, Float.toString(fahrzeug.getEkin()));
  	   setChoiceBox(cb_fahrzeugtyp, fahrzeug.getFahrzeugtyp());
- 	   setTextField(tf_startpunkt, Float.toString(fahrzeug.getStartpunkt()));
+ 	   if (modus == "Simulation") {setTextField(tf_startpunkt, Float.toString(fahrzeug.getStartpunkt()));}
     }
     
     
@@ -529,6 +727,45 @@ public class HomeController
 			System.out.println("Fehler bei der Auswahl des Untergrundes!");
 			return -1;
 		}
+    }
+    
+    
+    /**
+     * createError ist eine Methode, welche aufgerufen wird, wenn es zu einem unbekannten Fehler in der Laufzeit kommt. Dabei wird
+     * der aufgetretene Fehler dieser Methode uebergeben und dann in einem Fehlerfenster angezeigt.
+     * @param ex
+     */
+    public void createError(Exception ex)
+    {
+    	Alert alert = new Alert(AlertType.ERROR);
+    	alert.setTitle("Fehlermeldung");
+    	alert.setHeaderText("Unbekannter Fehler");
+    	alert.setContentText("Bitte versuchen Sie es sp‰ter erneut!");
+
+    	// Ausfahrbare Fehlermeldung.
+    	StringWriter sw = new StringWriter();
+    	PrintWriter pw = new PrintWriter(sw);
+    	ex.printStackTrace(pw);
+    	String exceptionText = sw.toString();
+
+    	Label label = new Label("Fehlerursache:");
+
+    	TextArea textArea = new TextArea(exceptionText);
+    	textArea.setEditable(false);
+    	textArea.setWrapText(true);
+
+    	textArea.setMaxWidth(Double.MAX_VALUE);
+    	textArea.setMaxHeight(Double.MAX_VALUE);
+    	GridPane.setVgrow(textArea, Priority.ALWAYS);
+    	GridPane.setHgrow(textArea, Priority.ALWAYS);
+
+    	GridPane expContent = new GridPane();
+    	expContent.setMaxWidth(Double.MAX_VALUE);
+    	expContent.add(label, 0, 0);
+    	expContent.add(textArea, 0, 1);
+
+    	alert.getDialogPane().setExpandableContent(expContent); //Fehlermeldung wird in eine Pane gesetzt
+    	alert.showAndWait();
     }
     
     

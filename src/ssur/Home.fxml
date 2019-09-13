@@ -27,7 +27,7 @@
                   <Font name="System Bold" size="23.0" />
                </font>
             </Label>
-            <RadioButton fx:id="rbtn_simulation" mnemonicParsing="false" prefHeight="42.0" prefWidth="174.0" selected="true" styleClass="sideMenuButton" stylesheets="@Style.css" text="Simulation">
+            <RadioButton fx:id="rbtn_simulation" mnemonicParsing="false" onAction="#goToSimulation" prefHeight="42.0" prefWidth="174.0" selected="true" styleClass="sideMenuButton" stylesheets="@Style.css" text="Simulation">
                <toggleGroup>
                   <ToggleGroup fx:id="modus" />
                </toggleGroup>
@@ -35,7 +35,7 @@
                   <Insets left="5.0" />
                </padding>
             </RadioButton>
-            <RadioButton fx:id="rbtn_rekonstruktion" mnemonicParsing="false" prefHeight="42.0" prefWidth="178.0" styleClass="sideMenuButton" stylesheets="@Style.css" text="Rekonstruktion" toggleGroup="$modus">
+            <RadioButton fx:id="rbtn_rekonstruktion" mnemonicParsing="false" onAction="#goToRekonstruktion" prefHeight="42.0" prefWidth="178.0" styleClass="sideMenuButton" stylesheets="@Style.css" text="Rekonstruktion" toggleGroup="$modus">
                <padding>
                   <Insets left="5.0" />
                </padding>
@@ -60,7 +60,7 @@
                </graphic>
             </Button>
             <Separator opacity="0.0" orientation="VERTICAL" prefHeight="42.0" prefWidth="0.0" />
-            <Label fx:id="lb_version" alignment="CENTER" prefHeight="18.0" prefWidth="198.0" styleClass="MenuText" stylesheets="@Style.css" text="Version 0.1 alpha" textFill="WHITE">
+            <Label fx:id="lb_version" alignment="CENTER" prefHeight="18.0" prefWidth="198.0" styleClass="MenuText" stylesheets="@Style.css" text="Version 0.2" textFill="WHITE">
                <opaqueInsets>
                   <Insets />
                </opaqueInsets>
@@ -163,9 +163,15 @@
                   </ImageView>
                </graphic>
             </ToggleButton>
-            <Label fx:id="lb_aufprallzeitpunkt" layoutX="304.0" layoutY="168.0" text="Aufprallzeitpunkt:" />
-            <Label fx:id="lb_aufprallort" layoutX="321.0" layoutY="144.0" text="Aufprallort:" />
-            <Label fx:id="lb_anhalteweg" layoutX="318.0" layoutY="119.0" text="Anhalteweg:" />
+            <Label fx:id="lb_aufprallzeitpunkt" alignment="CENTER" layoutX="1.0" layoutY="168.0" prefHeight="17.0" prefWidth="702.0" text="Aufprallzeitpunkt:" textAlignment="CENTER" />
+            <Label fx:id="lb_aufprallort" alignment="CENTER" layoutX="1.0" layoutY="144.0" prefHeight="17.0" prefWidth="700.0" text="Aufprallort:" textAlignment="CENTER" />
+            <Label fx:id="lb_anhalteweg" alignment="CENTER" layoutY="119.0" prefHeight="17.0" prefWidth="701.0" text="Anhalteweg:" textAlignment="CENTER" />
+            <Label fx:id="lb_modus" alignment="CENTER" layoutY="28.0" prefHeight="35.0" prefWidth="701.0" text="Simulationsmodus" textAlignment="CENTER" textFill="#363636">
+               <font>
+                  <Font name="System Bold" size="24.0" />
+               </font>
+            </Label>
+            <Label fx:id="lb_rekonstruktion" alignment="CENTER" layoutY="92.0" prefHeight="17.0" prefWidth="703.0" text="Rekonstruktion:" />
          </children></Pane>
    </center>
 </BorderPane>

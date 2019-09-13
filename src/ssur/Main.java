@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 public class Main extends Application 
@@ -23,6 +24,7 @@ public class Main extends Application
         
         window.setTitle("SSUR");
         window.setScene(new Scene(home));
+        //window.getIcons().add(new Image(this.getClass().getResource("login.png").toString()));
         window.setResizable(false);
         window.show();
     }
