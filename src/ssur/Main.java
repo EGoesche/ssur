@@ -24,7 +24,7 @@ public class Main extends Application
         
         window.setTitle("SSUR");
         window.setScene(new Scene(home));
-        //window.getIcons().add(new Image(this.getClass().getResource("login.png").toString()));
+        window.getIcons().add(new Image("ssur/icons/icon.png"));
         window.setResizable(false);
         window.show();
     }

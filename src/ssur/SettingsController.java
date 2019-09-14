@@ -14,12 +14,16 @@ import javafx.stage.Stage;
 
 public class SettingsController 
 {
-	//Items
-	@FXML private Label lb1;
-	@FXML private Button btn1;
+	//Items im Pane
+	@FXML private Label lb_titel;
+	@FXML private Label lb_beschreibung;
+	@FXML private Label lb_autor;
+	@FXML private Label lb_version;
+	@FXML private Button btn_zurueck;
 	
 	/**
      * Methode fuer den Wechsel zur Scene Home
+     * Das Stylesheet und andere Parameter werden fuer die Scene home festgelegt.
      * @throws IOException 
      */
     @FXML

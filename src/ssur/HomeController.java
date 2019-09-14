@@ -116,10 +116,21 @@ public class HomeController
     	cb_untergrund.setItems(untergrunde);
     	
     	//Tooltipps werden erstellt
+    	tf_energie.setTooltip(new Tooltip("Geben Sie die kinetische Energie des aktuellen Fahrzeuges an."));
+    	tf_geschwindigkeit.setTooltip(new Tooltip("Geben Sie die Geschwindigkeit des aktuellen Fahrzeuges an."));
+    	tf_gewicht.setTooltip(new Tooltip("Geben Sie das Gewicht des aktuellen Fahrzeuges an."));
+    	tf_impuls.setTooltip(new Tooltip("Geben Sie den Impuls des aktuellen Fahrzeuges an."));
+    	tf_startpunkt.setTooltip(new Tooltip("Geben Sie an, an welchem Punkt das aktuelle Fahrzeug startet. Bitte verwenden Sie eine gedachte X-Achse, welche im obrigen Schema ganz links ihren Ursprung besitzt."));
     	cb_fahrzeugtyp.setTooltip(new Tooltip("Wählen Sie den Typ des aktuellen Fahrzeuges."));
     	cb_fahrtrichtung.setTooltip(new Tooltip("Wählen Sie die Fahrtrichtung des aktuellen Fahrzeuges."));
     	cb_untergrund.setTooltip(new Tooltip("Wählen Sie den Untergrund, auf dem die Fahrzeuge fahren."));
-    	tf_startpunkt.setTooltip(new Tooltip("Geben Sie an, an welchem Punkt das aktuelle Fahrzeug startet."));
+    	btn_zuruecksetzen.setTooltip(new Tooltip("Klicken Sie hier, um alle Parameter zurückzusetzen."));
+    	btn_parameterspeichern.setTooltip(new Tooltip("Klicken Sie hier, um Ihre Parameter des ausgewählten Fahrzeuges zu speichern."));
+    	tbtn_fahrzeug1.setTooltip(new Tooltip("Klicken Sie hier, um die Parameter des Fahrzeuges 1 anzuzeigen."));
+    	tbtn_fahrzeug2.setTooltip(new Tooltip("Klicken Sie hier, um die Parameter des Fahrzeuges 2 anzuzeigen."));
+
+
+    	
     	
     	//Textlabel fuer die Berechnungen werden versteckt
     	lb_aufprallort.setVisible(false);

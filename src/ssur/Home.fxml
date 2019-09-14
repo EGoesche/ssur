@@ -45,7 +45,7 @@
                <graphic>
                   <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@icons/platzh.png" />
+                        <Image url="@icons/start.png" />
                      </image>
                   </ImageView>
                </graphic>
@@ -54,7 +54,7 @@
                <graphic>
                   <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@icons/platzh.png" />
+                        <Image url="@icons/settings.png" />
                      </image>
                   </ImageView>
                </graphic>
@@ -128,7 +128,7 @@
                      <children>
                         <Button fx:id="btn_zuruecksetzen" alignment="CENTER" mnemonicParsing="false" onAction="#berechnungZuruecksetzen" prefHeight="26.0" prefWidth="90.0" text="Zurücksetzen" />
                         <Separator opacity="0.0" orientation="VERTICAL" prefHeight="15.0" />
-                        <Button fx:id="btn_parameterspeichern1" alignment="CENTER" mnemonicParsing="false" onAction="#speichereParameter" prefHeight="26.0" prefWidth="90.0" text="Speichern" />
+                        <Button fx:id="btn_parameterspeichern" alignment="CENTER" mnemonicParsing="false" onAction="#speichereParameter" prefHeight="26.0" prefWidth="90.0" text="Speichern" />
                      </children>
                      <padding>
                         <Insets bottom="30.0" />
