@@ -35,7 +35,6 @@ public class SettingsController
     	Stage window = (Stage)((Node)event.getSource()).getScene().getWindow();
     	
     	window.setScene(home);
-    	//window.getIcons().add(new Image(this.getClass().getResource("login.png").toString()));
     	window.setResizable(false);
     	window.show();
     }

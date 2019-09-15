@@ -7,6 +7,7 @@ package ssur;
 
 public class Fahrzeug 
 {
+	//Variablen
 	private float geschwindigkeit; //in km/h
 	private String fahrtrichtung;
 	private float gewicht; //in kg
@@ -15,6 +16,10 @@ public class Fahrzeug
 	private float impuls;
 	private float ekin;
 	
+	/**
+	 * Klassenmethode
+	 * Initialisiert ein Fahrzeug mit den Werten 0 bzw. Standardwerten.
+	 */
 	public Fahrzeug()
 	{
 		geschwindigkeit = 0;
@@ -26,6 +31,19 @@ public class Fahrzeug
 		ekin = 0;		
 	}
 	
+	
+	/**
+	 * Klassenmethode
+	 * Initialisiert ein Fahrzeug mit den uebergebenen Parametern.
+	 * @param geschwindigkeit
+	 * @param fahrtrichtung
+	 * @param gewicht
+	 * @param startpunkt
+	 * @param farbcode
+	 * @param fahrzeugtyp
+	 * @param impuls
+	 * @param ekin
+	 */
 	public Fahrzeug(float geschwindigkeit, String fahrtrichtung, float gewicht, float startpunkt, String farbcode, String fahrzeugtyp, float impuls, float ekin)
 	{
 		this.geschwindigkeit = geschwindigkeit;
@@ -36,6 +54,7 @@ public class Fahrzeug
 		this.impuls = impuls;
 		this.ekin = ekin;
 	}
+	
 	
 	//Getter und Setter
 	public float getGeschwindigkeit() {return geschwindigkeit;}

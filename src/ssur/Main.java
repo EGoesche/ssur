@@ -14,7 +14,8 @@ public class Main extends Application
         launch(args);
     }
 
-    Scene home, data, settings;
+    //Die Home- und Einstellungsscene wird erstellt.
+    Scene home, settings;
     
     @Override
     public void start(Stage window) throws Exception

@@ -168,6 +168,8 @@ public class HomeController
     
     /**
      * Wechsel in den Rekonstruktionsmodus
+     * Fahrzeugicons werden in die Position fuer einen Zusammenstoss gebracht, Label werden entsprechend gesetzt und alle Parameter
+     * werden zurückgesetzt.
      * @param event
      * @throws IOException
      */
@@ -240,7 +242,9 @@ public class HomeController
     
     
     /**
-     * Wechsel in den Rekonstruktionsmodus
+     * Wechsel in den Simulationsmodus
+     * Fahrzeugicons werden in die Ausgangsposition gebracht, Label werden entsprechend gesetzt und alle Parameter
+     * werden zurückgesetzt.
      * @param event
      * @throws IOException
      */
@@ -500,6 +504,14 @@ public class HomeController
     }
     
     
+    /**
+     * Methode zur Berechnung aller wichtigen Parameter eines Stosses.
+     * Diese Methode berechnet den Aufprallort, Aufprallzeitpunkt, Aufprallgeschwindigkeit und den Anhalteweg eines Stosses.
+     * Die hierfuer benoetigten Parameter erhaelt die Methode aus den zwei Fahrzeugobjekten. Ausserdem werden Fahrzeugicons
+     * der Berechnung getrau animiert. Im Rekonstruktionsmodus entscheidet die Methode unter einer 5-prozentigen Toleranz, ob
+     * ein Stoss unter den gegebenen Werten moeglich sein kann.
+     * @param event
+     */
     @FXML
     public void starteBerechnung(ActionEvent event)
     {
