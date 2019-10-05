@@ -35,16 +35,15 @@ public class Fahrzeug
 	/**
 	 * Klassenmethode
 	 * Initialisiert ein Fahrzeug mit den uebergebenen Parametern.
-	 * @param geschwindigkeit
-	 * @param fahrtrichtung
-	 * @param gewicht
-	 * @param startpunkt
-	 * @param farbcode
-	 * @param fahrzeugtyp
-	 * @param impuls
-	 * @param ekin
-	 */
-	public Fahrzeug(float geschwindigkeit, String fahrtrichtung, float gewicht, float startpunkt, String farbcode, String fahrzeugtyp, float impuls, float ekin)
+	 * @param geschwindigkeit	Geschwindigkeit in km/h, die das Fahrzeug besitzt
+	 * @param fahrtrichtung	Fahrtrichtung (links oder rechts), die das Fahrzeug besitzt
+	 * @param gewicht	Fahrzeuggewicht in kg
+	 * @param startpunkt	Position, von welcher das Fahrzeug startet in Meter
+	 * @param fahrzeugtyp	Art des Fahrzeuges (PKW, LKW, Fahrrad oder E-Scooter)
+	 * @param impuls	Impuls in Ns des Fahrzeuges
+	 * @param ekin	kinetische Energie in J des Fahrzeuges
+	 */	
+	public Fahrzeug(float geschwindigkeit, String fahrtrichtung, float gewicht, float startpunkt, String fahrzeugtyp, float impuls, float ekin)
 	{
 		this.geschwindigkeit = geschwindigkeit;
 		this.fahrtrichtung = fahrtrichtung;

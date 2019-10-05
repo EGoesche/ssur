@@ -17,6 +17,10 @@ public class Main extends Application
     //Die Home- und Einstellungsscene wird erstellt.
     Scene home, settings;
     
+    /**
+     * Startmethode
+     * Laedt das Startfenster mit Titel, Icon und anderen Voreinstellungen.
+     */
     @Override
     public void start(Stage window) throws Exception
     {

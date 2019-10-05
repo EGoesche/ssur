@@ -170,7 +170,7 @@ public class HomeController
      * Wechsel in den Rekonstruktionsmodus
      * Fahrzeugicons werden in die Position fuer einen Zusammenstoss gebracht, Label werden entsprechend gesetzt und alle Parameter
      * werden zurückgesetzt.
-     * @param event
+     * @param event ActionEvent
      * @throws IOException
      */
     @FXML
@@ -245,7 +245,7 @@ public class HomeController
      * Wechsel in den Simulationsmodus
      * Fahrzeugicons werden in die Ausgangsposition gebracht, Label werden entsprechend gesetzt und alle Parameter
      * werden zurückgesetzt.
-     * @param event
+     * @param event ActionEvent
      * @throws IOException
      */
     @FXML
@@ -319,7 +319,7 @@ public class HomeController
      * Parameter speichern
      * Methode fuer das Speichern der eingegebenen Parameter. Je nachdem welches Fahrzeug ausgewaehlt wurde werden die Eingaben.
      * auf dieses gespeichert. Ist kein Fahrzeug ausgewaehlt, wird eine Fehlermeldung ausgegeben.
-     * @param event
+     * @param event ActionEvent
      * @throws IOException
      */
     @FXML
@@ -431,7 +431,7 @@ public class HomeController
     
     /**
      * FXML Event-Methode um die Parameter des jeweiligen Fahrzeuges in die TextFelder bzw. in die ChoiceBoxen zu laden.
-     * @param event
+     * @param event ActionEvent
      */
     @FXML
     public void ladeParameter(MouseEvent event)
@@ -510,7 +510,7 @@ public class HomeController
      * Die hierfuer benoetigten Parameter erhaelt die Methode aus den zwei Fahrzeugobjekten. Ausserdem werden Fahrzeugicons
      * der Berechnung getrau animiert. Im Rekonstruktionsmodus entscheidet die Methode unter einer 5-prozentigen Toleranz, ob
      * ein Stoss unter den gegebenen Werten moeglich sein kann.
-     * @param event
+     * @param event ActionEvent
      */
     @FXML
     public void starteBerechnung(ActionEvent event)
@@ -631,7 +631,7 @@ public class HomeController
     
     /**
      * Parameter des jeweiligen Fahrzeuges werden in die TextFelder bzw. in die ChoiceBoxen geladen.
-     * @param fahrzeug
+     * @param fahrzeug Fahrzeug, fuer welches die Parameter geladen werden sollen
      */
     public void ladeParameter(Fahrzeug fahrzeug)
     {
@@ -650,7 +650,7 @@ public class HomeController
      * Beide Fahrzeuge fahren aufeinander zu und bewegen sich nach dem Stoß je nach der nachstossgeschwindigkeit unterschiedlich weiter.
      * Ist diese postiv, bewegen sie sich nach rechts, ist sie negativ, bewegen sie sich nach links. Betraegt sie null m/s, so bewegen
      * sich beide Fahrzeuge nicht weiter.
-     * @param nachstossgeschwindigkeit
+     * @param nachstossgeschwindigkeit Geschwindigkeit nach dem Stoss, mit welcher die Aninmation gestartet wird
      */
     public void starteAnimation(float nachstossgeschwindigkeit)
     {
@@ -697,7 +697,7 @@ public class HomeController
     /**
      * Float runden
      * Methode zum Runden einer Floatzahl
-     * @param eingabe
+     * @param eingabe Float, welcher gerundet werden soll
      * @return
      */
     public float rundeFloat(float eingabe)
@@ -756,7 +756,7 @@ public class HomeController
     /**
      * createError ist eine Methode, welche aufgerufen wird, wenn es zu einem unbekannten Fehler in der Laufzeit kommt. Dabei wird
      * der aufgetretene Fehler dieser Methode uebergeben und dann in einem Fehlerfenster angezeigt.
-     * @param ex
+     * @param ex Fehler, welcher behandelt werden soll
      */
     public void createError(Exception ex)
     {
@@ -794,8 +794,8 @@ public class HomeController
     
     /**
      * Methode um Inhalt fuer eine ChoiceBox setzen zu koennen
-     * @param choiceBox
-     * @param value
+     * @param choiceBox	ChoiceBox, welche geaendert werden soll
+     * @param value String, welcher gesetzt werden soll
      */
     public void setChoiceBox(ChoiceBox<String> choiceBox, String value)
     {
@@ -805,8 +805,8 @@ public class HomeController
     
     /**
      * Methode um Inhalt fuer ein TextField setzen zu koennen
-     * @param textField
-     * @param value
+     * @param textField	TextField, welches geaendert werden soll
+     * @param value String, welcher gesetzt werden soll
      */
     public void setTextField(TextField textField, String value)
     {
@@ -818,18 +818,30 @@ public class HomeController
      * Berechnung Aufprallzeitpunkt
      * Methode zur Berechnung des Aufprallzeitpunktes zweier Fahrzeuge. Kommt es zu keinem Aufprall, wird ein Fehler ausgegeben
      * und der Wert -1 zurueckgegeben.
-     * @param geschw1
-     * @param geschw2
-     * @param fahrtricht1
-     * @param fahrtricht2
-     * @param startp1
-     * @param startp2
+     * @param geschw1	Gewicht des ersten Fahrzeuges
+     * @param geschw2	Gewicht des zweiten Fahrzeuges
+     * @param fahrtricht1	Fahrtrichtung des ersten Fahrzeuges
+     * @param fahrtricht2	Fahrtrichtung des zweiten Fahrzeuges
+     * @param startp1	Startpunkt des ersten Fahrzeuges
+     * @param startp2	Startpunkt des zweiten Fahrzeuges
      * @return
      */
     public float berechneAufprallzeitpunkt(float geschw1, float geschw2, String fahrtricht1, String fahrtricht2,
     		float startp1, float startp2)
     {
-    	if (geschw1 == geschw2 && fahrtricht1 == fahrtricht2) //Fahrzeuge fahren gleichschnell in selbe Richtung
+    	if ((fahrtricht1 == "links" && fahrtricht2 == "rechts") && (startp1 != startp2)) //Fahrzeuge fahren auseinander
+    	{
+    		System.out.println("Fehler! Fahrzeuge treffen sich nie.");
+    		return -1;
+    	}
+    	
+    	else if ((geschw1 == 0  && fahrtricht2 == "rechts") || (geschw2 == 0  && fahrtricht1 == "links")) //Ein Fahrzeug steht und das andere fährt vom stehenden weg
+    	{
+    		System.out.println("Fehler! Fahrzeuge treffen sich nie.");
+    		return -1;
+    	}
+    	
+    	else if (geschw1 == geschw2 && fahrtricht1 == fahrtricht2) //Fahrzeuge fahren gleichschnell in selbe Richtung
     	{
     		System.out.println("Fehler! Fahrzeuge treffen sich nie.");
     		return -1;
@@ -864,18 +876,30 @@ public class HomeController
      * Berechnung Aufprallort
      * Methode zur Berechnung des Aufprallortes zweier Fahrzeuge. Kommt es zu keinem Aufprall, wird ein Fehler ausgegeben
      * und der Wert -1 zurueckgegeben.
-     * @param geschw1
-     * @param geschw2
-     * @param fahrtricht1
-     * @param fahrtricht2
-     * @param startp1
-     * @param startp2
+     * @param geschw1	Gewicht des ersten Fahrzeuges
+     * @param geschw2	Gewicht des zweiten Fahrzeuges
+     * @param fahrtricht1	Fahrtrichtung des ersten Fahrzeuges
+     * @param fahrtricht2	Fahrtrichtung des zweiten Fahrzeuges
+     * @param startp1	Startpunkt des ersten Fahrzeuges
+     * @param startp2	Startpunkt des zweiten Fahrzeuges
      * @return
      */
     public float berechneAufprallort(float geschw1, float geschw2, String fahrtricht1, String fahrtricht2,
     		float startp1, float startp2)
     {
-    	if (geschw1 == geschw2 && fahrtricht1 == fahrtricht2) //Fahrzeuge fahren gleichschnell in selbe Richtung
+    	if ((fahrtricht1 == "links" && fahrtricht2 == "rechts") && (startp1 != startp2)) //Fahrzeuge fahren auseinander
+    	{
+    		System.out.println("Fehler! Fahrzeuge treffen sich nie.");
+    		return -1;
+    	}
+    	
+    	else if ((geschw1 == 0  && fahrtricht2 == "rechts") || (geschw2 == 0  && fahrtricht1 == "links")) //Ein Fahrzeug steht und das andere fährt vom stehenden weg
+    	{
+    		System.out.println("Fehler! Fahrzeuge treffen sich nie.");
+    		return -1;
+    	}
+    	
+    	else if (geschw1 == geschw2 && fahrtricht1 == fahrtricht2) //Fahrzeuge fahren gleichschnell in selbe Richtung
     	{
     		System.out.println("Fehler! Fahrzeuge treffen sich nie.");
     		return -1;
