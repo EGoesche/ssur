@@ -35,6 +35,6 @@ Um weitere Informationen zu erhalten, lesen Sie bitte die [CONTRIBUTING.md](CONT
 
 Um zu erfahren, wer zusätzlich an diesem Projekt gearbeitet hat, lesen Sie bitte die contributors-Datei.
 
-## Lizens
+## Lizenz
 
 Dieses Projekt ist lizensiert unter der GNU GPLv3 - weitere Informationen unter [LICENSE.md](LICENSE.md).
