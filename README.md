@@ -37,4 +37,4 @@ Um zu erfahren, wer zusätzlich an diesem Projekt gearbeitet hat, lesen Sie bitt
 
 ## Lizenz
 
-Dieses Projekt ist lizensiert unter der GNU GPLv3 - weitere Informationen unter [LICENSE.md](LICENSE.md).
+Dieses Projekt ist lizensiert unter der GNU GPLv3 - weitere Informationen unter [LICENSE](LICENSE).
