@@ -720,7 +720,7 @@ public class HomeController
     
     /**
      * Kinetische Energie berechnen
-     * Methode zum Berechnen der kinetischen Energie desd ausgewaehlten Fahrzeuges aus den aktuellen TextFields
+     * Methode zum Berechnen der kinetischen Energie des ausgewaehlten Fahrzeuges aus den aktuellen TextFields
      * @return
      */
     public float berechneEkin()
@@ -932,5 +932,4 @@ public class HomeController
     		return ((geschw1 / 3.6f) * aufprallzeitpunkt);
     	}
     }
-        
 }

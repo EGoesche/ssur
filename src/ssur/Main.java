@@ -33,7 +33,4 @@ public class Main extends Application
         window.setResizable(false);
         window.show();
     }
-
-
-
 }
