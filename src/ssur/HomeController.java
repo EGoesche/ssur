@@ -121,11 +121,11 @@ public class HomeController
     	tf_gewicht.setTooltip(new Tooltip("Geben Sie das Gewicht des aktuellen Fahrzeuges an."));
     	tf_impuls.setTooltip(new Tooltip("Geben Sie den Impuls des aktuellen Fahrzeuges an."));
     	tf_startpunkt.setTooltip(new Tooltip("Geben Sie an, an welchem Punkt das aktuelle Fahrzeug startet. Bitte verwenden Sie eine gedachte X-Achse, welche im obrigen Schema ganz links ihren Ursprung besitzt."));
-    	cb_fahrzeugtyp.setTooltip(new Tooltip("Wählen Sie den Typ des aktuellen Fahrzeuges."));
-    	cb_fahrtrichtung.setTooltip(new Tooltip("Wählen Sie die Fahrtrichtung des aktuellen Fahrzeuges."));
-    	cb_untergrund.setTooltip(new Tooltip("Wählen Sie den Untergrund, auf dem die Fahrzeuge fahren."));
-    	btn_zuruecksetzen.setTooltip(new Tooltip("Klicken Sie hier, um alle Parameter zurückzusetzen."));
-    	btn_parameterspeichern.setTooltip(new Tooltip("Klicken Sie hier, um Ihre Parameter des ausgewählten Fahrzeuges zu speichern."));
+    	cb_fahrzeugtyp.setTooltip(new Tooltip("Waehlen Sie den Typ des aktuellen Fahrzeuges."));
+    	cb_fahrtrichtung.setTooltip(new Tooltip("Waehlen Sie die Fahrtrichtung des aktuellen Fahrzeuges."));
+    	cb_untergrund.setTooltip(new Tooltip("Waehlen Sie den Untergrund, auf dem die Fahrzeuge fahren."));
+    	btn_zuruecksetzen.setTooltip(new Tooltip("Klicken Sie hier, um alle Parameter zurueckzusetzen."));
+    	btn_parameterspeichern.setTooltip(new Tooltip("Klicken Sie hier, um Ihre Parameter des ausgewaehlten Fahrzeuges zu speichern."));
     	tbtn_fahrzeug1.setTooltip(new Tooltip("Klicken Sie hier, um die Parameter des Fahrzeuges 1 anzuzeigen."));
     	tbtn_fahrzeug2.setTooltip(new Tooltip("Klicken Sie hier, um die Parameter des Fahrzeuges 2 anzuzeigen."));
 
@@ -169,7 +169,7 @@ public class HomeController
     /**
      * Wechsel in den Rekonstruktionsmodus
      * Fahrzeugicons werden in die Position fuer einen Zusammenstoss gebracht, Label werden entsprechend gesetzt und alle Parameter
-     * werden zurückgesetzt.
+     * werden zurueckgesetzt.
      * @param event ActionEvent
      * @throws IOException
      */
@@ -205,7 +205,7 @@ public class HomeController
 		lb_startpunkt.setText("Anhalteweg (in m)");
 		
 		//Tooltipps werden erstellt
-    	tf_startpunkt.setTooltip(new Tooltip("Der Anhalteweg ist für beide Fahrzeuge gleich groß."));
+    	tf_startpunkt.setTooltip(new Tooltip("Der Anhalteweg ist fuer beide Fahrzeuge gleich gross."));
     	
     	//Alle Parameter der Fahrzeuge werden zurueckgesetzt
     	f1.setEkin(0);
@@ -244,7 +244,7 @@ public class HomeController
     /**
      * Wechsel in den Simulationsmodus
      * Fahrzeugicons werden in die Ausgangsposition gebracht, Label werden entsprechend gesetzt und alle Parameter
-     * werden zurückgesetzt.
+     * werden zurueckgesetzt.
      * @param event ActionEvent
      * @throws IOException
      */
@@ -418,7 +418,7 @@ public class HomeController
     			Alert alert = new Alert(AlertType.ERROR);
     			alert.setTitle("Fehlermeldung");
     			alert.setHeaderText("Fehler beim Speichern");
-    			alert.setContentText("Bitte wählen Sie zuerst ein Fahrzeug!");
+    			alert.setContentText("Bitte waehlen Sie zuerst ein Fahrzeug!");
     			alert.showAndWait();
     		}
     	}
@@ -567,7 +567,7 @@ public class HomeController
     				
     				//vektorielle Geschwindigkeit nach dem Stoss wird berechnet
     				float nachstossgeschwindgkeit = (f1.getImpuls() + f2.getImpuls()) / (f1.getGewicht() + f2.getGewicht());
-    				System.out.println("Geschwindigkeit nach dem Stoß: " + rundeFloat(nachstossgeschwindgkeit) + "m/s");
+    				System.out.println("Geschwindigkeit nach dem Stoss: " + rundeFloat(nachstossgeschwindgkeit) + "m/s");
     				
     				//Anhalteweg nach dem Stoss wird berechnet
     				float gesamtgewicht = rundeFloat(f1.getGewicht() + f2.getGewicht());
@@ -583,7 +583,7 @@ public class HomeController
 				{
 					//vektorielle Geschwindigkeit nach dem Stoss wird berechnet
 					float nachstossgeschwindgkeit = (f1.getImpuls() + f2.getImpuls()) / (f1.getGewicht() + f2.getGewicht());
-					System.out.println("Geschwindigkeit nach dem Stoß: " + rundeFloat(nachstossgeschwindgkeit) + "m/s");
+					System.out.println("Geschwindigkeit nach dem Stoss: " + rundeFloat(nachstossgeschwindgkeit) + "m/s");
 					
 					//Anhalteweg nach dem Stoss wird berechnet
 					float gesamtgewicht = rundeFloat(f1.getGewicht() + f2.getGewicht());
@@ -595,11 +595,11 @@ public class HomeController
 					//Falls berechneter Anhalteweg mit angegebenen Anhalteweg uerbeinstimmt (mit 5% Toleranz)
 					if (nachstossstrecke < (Float.parseFloat(tf_startpunkt.getText()) + Float.parseFloat(tf_startpunkt.getText()) * 0.05f) && nachstossstrecke > (Float.parseFloat(tf_startpunkt.getText())) - Float.parseFloat(tf_startpunkt.getText()) * 0.05f)
 					{
-						lb_rekonstruktion.setText("Der Stoß ist unter den eingegebenen Parametern möglich.");
+						lb_rekonstruktion.setText("Der Stoss ist unter den eingegebenen Parametern moeglich.");
 					}
 					else
 					{
-						lb_rekonstruktion.setText("Der Stoß ist unter den eingegebenen Parametern nicht möglich.");
+						lb_rekonstruktion.setText("Der Stoss ist unter den eingegebenen Parametern nicht moeglich.");
 					}
 				}
 				else
@@ -608,7 +608,7 @@ public class HomeController
 	    			Alert alert = new Alert(AlertType.ERROR);
 	    			alert.setTitle("Fehlermeldung");
 	    			alert.setHeaderText("Fehler beim Moduswechsel");
-	    			alert.setContentText("Versuchen Sie es später erneut!");
+	    			alert.setContentText("Versuchen Sie es spaeter erneut!");
 	    			alert.showAndWait();
 				}
 			}
@@ -618,7 +618,7 @@ public class HomeController
     			Alert alert = new Alert(AlertType.ERROR);
     			alert.setTitle("Fehlermeldung");
     			alert.setHeaderText("Fehler bei der Berechnung");
-    			alert.setContentText("Es kann zu keinem Zusammenstoß der Fahrzeuge kommen!");
+    			alert.setContentText("Es kann zu keinem Zusammenstoss der Fahrzeuge kommen!");
     			alert.showAndWait();
     		}
     	}
@@ -647,7 +647,7 @@ public class HomeController
     
     /**
      * Animation fuer die Bewegung beider Fahrzeuge.
-     * Beide Fahrzeuge fahren aufeinander zu und bewegen sich nach dem Stoß je nach der nachstossgeschwindigkeit unterschiedlich weiter.
+     * Beide Fahrzeuge fahren aufeinander zu und bewegen sich nach dem Stoss je nach der nachstossgeschwindigkeit unterschiedlich weiter.
      * Ist diese postiv, bewegen sie sich nach rechts, ist sie negativ, bewegen sie sich nach links. Betraegt sie null m/s, so bewegen
      * sich beide Fahrzeuge nicht weiter.
      * @param nachstossgeschwindigkeit Geschwindigkeit nach dem Stoss, mit welcher die Aninmation gestartet wird
@@ -763,7 +763,7 @@ public class HomeController
     	Alert alert = new Alert(AlertType.ERROR);
     	alert.setTitle("Fehlermeldung");
     	alert.setHeaderText("Unbekannter Fehler");
-    	alert.setContentText("Bitte versuchen Sie es später erneut!");
+    	alert.setContentText("Bitte versuchen Sie es spaeter erneut!");
 
     	// Ausfahrbare Fehlermeldung.
     	StringWriter sw = new StringWriter();
@@ -835,7 +835,7 @@ public class HomeController
     		return -1;
     	}
     	
-    	else if ((geschw1 == 0  && fahrtricht2 == "rechts") || (geschw2 == 0  && fahrtricht1 == "links")) //Ein Fahrzeug steht und das andere fährt vom stehenden weg
+    	else if ((geschw1 == 0  && fahrtricht2 == "rechts") || (geschw2 == 0  && fahrtricht1 == "links")) //Ein Fahrzeug steht und das andere faehrt vom stehenden weg
     	{
     		System.out.println("Fehler! Fahrzeuge treffen sich nie.");
     		return -1;
@@ -893,7 +893,7 @@ public class HomeController
     		return -1;
     	}
     	
-    	else if ((geschw1 == 0  && fahrtricht2 == "rechts") || (geschw2 == 0  && fahrtricht1 == "links")) //Ein Fahrzeug steht und das andere fährt vom stehenden weg
+    	else if ((geschw1 == 0  && fahrtricht2 == "rechts") || (geschw2 == 0  && fahrtricht1 == "links")) //Ein Fahrzeug steht und das andere faehrt vom stehenden weg
     	{
     		System.out.println("Fehler! Fahrzeuge treffen sich nie.");
     		return -1;
